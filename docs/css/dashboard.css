@@ -1,0 +1,178 @@
+/* Loading overlay */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease;
+}
+
+#loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #d73f3f;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Map */
+#map {
+  width: 100%;
+  height: 500px;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  #map {
+    height: 400px;
+    border-radius: 8px;
+  }
+}
+
+/* Map legend */
+.map-legend {
+  background: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.map-legend-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #374151;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.map-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Chart containers */
+.chart-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card canvas {
+  max-height: 350px;
+}
+
+/* Summary cards */
+.summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #d73f3f;
+}
+
+.summary-card .card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.summary-card .card-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Filters */
+.filter-select {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: white;
+  color: #374151;
+  min-width: 120px;
+  appearance: auto;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #d73f3f;
+  box-shadow: 0 0 0 2px rgba(215, 63, 63, 0.2);
+}
+
+/* MapLibre popup */
+.maplibregl-popup-content {
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  max-width: 300px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.popup-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #1f2937;
+}
+
+.popup-detail {
+  color: #6b7280;
+}
+
+.popup-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #d73f3f;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.popup-link:hover {
+  text-decoration: underline;
+}
+
+/* Print styles */
+@media print {
+  #loading-overlay,
+  #filters,
+  .maplibregl-ctrl-group {
+    display: none !important;
+  }
+
+  #map {
+    height: 400px;
+  }
+
+  .chart-card {
+    break-inside: avoid;
+  }
+}
+
+/* Body background */
+body {
+  background-color: #f3f4f6;
+}
