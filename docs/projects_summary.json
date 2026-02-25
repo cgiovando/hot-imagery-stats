@@ -1,0 +1,1753 @@
+{
+  "generated": "2026-02-25T20:15:57Z",
+  "totalProjects": 70,
+  "projects": [
+    {
+      "id": 34926,
+      "name": "Missing Maps: Buildings in Ouaddai, Chad (7)",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Chad"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2025-11-10",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 710.62,
+      "centroid": [
+        21.7281,
+        13.7861
+      ],
+      "pctMapped": 65,
+      "pctValidated": 63,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42345,
+      "name": "Mozambique Floods, Chongoene01",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "Open Mapping Hub ESA",
+      "created": "2026-02-12",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 407.31,
+      "centroid": [
+        33.8538,
+        -24.9802
+      ],
+      "pctMapped": 97,
+      "pctValidated": 96,
+      "difficulty": "EASY",
+      "priority": "URGENT"
+    },
+    {
+      "id": 42807,
+      "name": "Madagascar Toamasina 2: TC GEZANI 26 - Roads PRIORITY 1",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Madagascar"
+      ],
+      "org": "HOT",
+      "created": "2026-02-14",
+      "mappingTypes": [
+        "ROADS"
+      ],
+      "areaSqKm": 2389.55,
+      "centroid": [
+        48.9738,
+        -17.9942
+      ],
+      "pctMapped": 88,
+      "pctValidated": 55,
+      "difficulty": "EASY",
+      "priority": "URGENT"
+    },
+    {
+      "id": 26604,
+      "name": "Missing Maps: Roads in Bamyan, Afghanistan (3)",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Afghanistan"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2025-08-06",
+      "mappingTypes": [
+        "ROADS"
+      ],
+      "areaSqKm": 598.85,
+      "centroid": [
+        67.1129,
+        34.4389
+      ],
+      "pctMapped": 29,
+      "pctValidated": 8,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 43203,
+      "name": "Central Division- Mukono District- Climate Change Mapping.",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Uganda"
+      ],
+      "org": "MapUganda",
+      "created": "2026-02-17",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "OTHER"
+      ],
+      "areaSqKm": 36.71,
+      "centroid": [
+        32.7483,
+        0.3462
+      ],
+      "pctMapped": 88,
+      "pctValidated": 1,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43830,
+      "name": "Mappers Squad _ Mapping Benin City for Resilience and Smart City Development  - Part 9",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Nigeria"
+      ],
+      "org": "TomTom",
+      "created": "2026-02-24",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 73.47,
+      "centroid": [
+        5.6952,
+        6.2078
+      ],
+      "pctMapped": 44,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 17210,
+      "name": "Mapping Ndirande - Buildings and Environmental Pollutants (Waste)",
+      "status": "PUBLISHED",
+      "imagery": "Custom",
+      "imageryRaw": "https://tiles.openaerialmap.org/66211b11bb689b000146b51a/0/66211b11bb689b000146b51b/{z}/{x}/{y}",
+      "country": [
+        "Malawi"
+      ],
+      "org": "OSM Malawi",
+      "created": "2024-07-17",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS",
+        "OTHER"
+      ],
+      "areaSqKm": 7.72,
+      "centroid": [
+        35.0377,
+        -15.7713
+      ],
+      "pctMapped": 89,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 18579,
+      "name": "Mapping the Unmapped: Buildings and roads in 36 Bangsamoro Barangays (1/2)",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Philippines"
+      ],
+      "org": "MapBeks",
+      "created": "2025-03-31",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 532.4,
+      "centroid": [
+        124.2226,
+        7.7249
+      ],
+      "pctMapped": 36,
+      "pctValidated": 6,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 36735,
+      "name": "Disaster Response in North Sumatera Indonesia, Building Mapping 2",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Indonesia"
+      ],
+      "org": "Perkumpulan OpenStreetMap Indonesia",
+      "created": "2025-11-28",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 940.75,
+      "centroid": [
+        98.8522,
+        1.3121
+      ],
+      "pctMapped": 48,
+      "pctValidated": 43,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 18509,
+      "name": "Proyecto Colaborativo Global Partnership - ONE- HOT Santo Domingo Rep\u00fablica Dominicana",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Dominican Republic"
+      ],
+      "org": "Open Mapping Hub for Latin America and the Caribbean",
+      "created": "2025-03-11",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1.29,
+      "centroid": [
+        -69.8742,
+        18.4718
+      ],
+      "pctMapped": 74,
+      "pctValidated": 23,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42873,
+      "name": "Mozambique TC GEZANI 26, Massinga 1 priority 1",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "Open Mapping Hub ESA",
+      "created": "2026-02-15",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 741.55,
+      "centroid": [
+        35.3518,
+        -23.3243
+      ],
+      "pctMapped": 76,
+      "pctValidated": 35,
+      "difficulty": "EASY",
+      "priority": "URGENT"
+    },
+    {
+      "id": 41718,
+      "name": "Mapeando por Mo\u00e7ambique: Macia",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "#MapeandoMeuBairro",
+      "created": "2026-02-08",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 40.68,
+      "centroid": [
+        33.104,
+        -25.0297
+      ],
+      "pctMapped": 28,
+      "pctValidated": 0,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 22941,
+      "name": "Mapping Polokwane for Resilience and Smart City Development",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "South Africa"
+      ],
+      "org": "TomTom",
+      "created": "2025-06-12",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 32.61,
+      "centroid": [
+        29.4714,
+        -23.901
+      ],
+      "pctMapped": 42,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 34923,
+      "name": "Missing Maps: Buildings in Ouaddai, Chad (4)",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Chad"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2025-11-10",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 192.14,
+      "centroid": [
+        20.6331,
+        13.4379
+      ],
+      "pctMapped": 36,
+      "pctValidated": 23,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 17682,
+      "name": "Missing Maps: Bassiknou District, Mauritania - Mbera camp",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Mauritania"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2024-09-25",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 13.45,
+      "centroid": [
+        -5.7951,
+        15.8428
+      ],
+      "pctMapped": 84,
+      "pctValidated": 56,
+      "difficulty": "CHALLENGING",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42840,
+      "name": "Africa Map Cup 2026 | CM - Cartographie des B\u00e2timents & Routes dans l'arrondissement de Nkambe, Cameroun, zone 2",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Cameroon"
+      ],
+      "org": "GeOsm Family",
+      "created": "2026-02-15",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 418.63,
+      "centroid": [
+        10.7947,
+        6.4204
+      ],
+      "pctMapped": 51,
+      "pctValidated": 41,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42246,
+      "name": "Africa Map Cup 2026 | Mapping the Unmapped: MOZAMBIQUE 6",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "GeoTE Tanzania",
+      "created": "2026-02-12",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 37.99,
+      "centroid": [
+        36.5336,
+        -14.8048
+      ],
+      "pctMapped": 30,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 41203,
+      "name": "Empowering Mutare: Urban Mapping for Sustainable Development",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Zimbabwe"
+      ],
+      "org": "OSM Zimbabwe",
+      "created": "2026-02-06",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS"
+      ],
+      "areaSqKm": 113.29,
+      "centroid": [
+        32.6349,
+        -18.999
+      ],
+      "pctMapped": 34,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 32808,
+      "name": "Mapping Buildings on Cura\u00e7ao for Disaster Preparedness - Part 3",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Curacao"
+      ],
+      "org": "TomTom",
+      "created": "2025-10-10",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 41.09,
+      "centroid": [
+        -68.9092,
+        12.1214
+      ],
+      "pctMapped": 68,
+      "pctValidated": 53,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42213,
+      "name": "Africa Map Cup 2026 | Mapping the Unmapped: MOZAMBIQUE 5",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "GeoTE Tanzania",
+      "created": "2026-02-12",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 20.07,
+      "centroid": [
+        38.5891,
+        -13.3471
+      ],
+      "pctMapped": 36,
+      "pctValidated": 13,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43236,
+      "name": "Ejido La Albarrada (SCLC, Chiapas)",
+      "status": "PUBLISHED",
+      "imagery": "Mapbox",
+      "imageryRaw": "Mapbox",
+      "country": [
+        "Mexico"
+      ],
+      "org": "OSM Mexico",
+      "created": "2026-02-17",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS"
+      ],
+      "areaSqKm": 13.47,
+      "centroid": [
+        -92.5983,
+        16.6913
+      ],
+      "pctMapped": 86,
+      "pctValidated": 57,
+      "difficulty": "EASY",
+      "priority": "LOW"
+    },
+    {
+      "id": 42906,
+      "name": "Kenya urban mapping for Resilience & Smart City Development_Kanduyi Subcounty",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Kenya"
+      ],
+      "org": "OSM Kenya",
+      "created": "2026-02-15",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 318.87,
+      "centroid": [
+        34.5917,
+        0.5565
+      ],
+      "pctMapped": 74,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43567,
+      "name": "Africa Map Cup (Mapping for Climate Restoration) \u2013 Kigabiro Sector",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Rwanda"
+      ],
+      "org": "EcoMappers, OSM Rwanda",
+      "created": "2026-02-21",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 37.74,
+      "centroid": [
+        30.4404,
+        -1.9787
+      ],
+      "pctMapped": 94,
+      "pctValidated": 8,
+      "difficulty": "EASY",
+      "priority": "HIGH"
+    },
+    {
+      "id": 30531,
+      "name": "Missing Maps: Roads in Twic County, South Sudan (5)",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "South Sudan"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2025-09-17",
+      "mappingTypes": [
+        "ROADS"
+      ],
+      "areaSqKm": 691.21,
+      "centroid": [
+        28.168,
+        9.1391
+      ],
+      "pctMapped": 73,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 44061,
+      "name": "AMC2026 - Mapping Benin City for Resilience and Smart City Development - Part 10",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Nigeria"
+      ],
+      "org": "Unique Mappers Network, Nigeria",
+      "created": "2026-02-25",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 41.42,
+      "centroid": [
+        5.6669,
+        6.2513
+      ],
+      "pctMapped": 0,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 41949,
+      "name": "Accessibility of Public Amenities in Ilesha East for Resilience and Smart City Development",
+      "status": "PUBLISHED",
+      "imagery": "Mapbox",
+      "imageryRaw": "Mapbox",
+      "country": [
+        "Nigeria"
+      ],
+      "org": "TomTom",
+      "created": "2026-02-09",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 103.9,
+      "centroid": [
+        4.7638,
+        7.5951
+      ],
+      "pctMapped": 92,
+      "pctValidated": 33,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 34921,
+      "name": "Missing Maps: Buildings in Ouaddai, Chad (3)",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Chad"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2025-11-10",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 318.7,
+      "centroid": [
+        21.1013,
+        13.8476
+      ],
+      "pctMapped": 99,
+      "pctValidated": 79,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 38583,
+      "name": "Estradas de Boa Viagem, Cear\u00e1 (CE), Brasil",
+      "status": "PUBLISHED",
+      "imagery": "Not specified",
+      "imageryRaw": "",
+      "country": [
+        "Brazil"
+      ],
+      "org": "OSM Brasil",
+      "created": "2026-01-06",
+      "mappingTypes": [
+        "ROADS"
+      ],
+      "areaSqKm": 2835.07,
+      "centroid": [
+        -39.8079,
+        -5.0878
+      ],
+      "pctMapped": 48,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "LOW"
+    },
+    {
+      "id": 41884,
+      "name": "Goma Division- Mokono District- Climate Change Mapping.",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Uganda"
+      ],
+      "org": "MapUganda",
+      "created": "2026-02-09",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "OTHER"
+      ],
+      "areaSqKm": 114.96,
+      "centroid": [
+        32.7037,
+        0.3841
+      ],
+      "pctMapped": 86,
+      "pctValidated": 30,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 18375,
+      "name": "Mapping for Mozambique:  Buzi 1",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "Open Mapping Hub ESA",
+      "created": "2025-01-27",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1.71,
+      "centroid": [
+        34.0436,
+        -19.73
+      ],
+      "pctMapped": 78,
+      "pctValidated": 0,
+      "difficulty": "CHALLENGING",
+      "priority": "HIGH"
+    },
+    {
+      "id": 41206,
+      "name": "Mapa de riesgo el Poblado-Medell\u00edn",
+      "status": "PUBLISHED",
+      "imagery": "Other",
+      "imageryRaw": " https://www.medellin.gov.co/servidormapas/services/ServiciosImagen/Ortofoto_Medellin_2024/ImageServer/WMSServer?FORMAT=image/png&TRANSPARENT=TRUE&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetMap&LAYERS=Ortofoto_Medellin_2024:Ortofoto_2024_3&STYLES=&CRS={proj}&WIDTH={width}&HEIGHT={height}&BBOX={bbox}",
+      "country": [
+        "Colombia"
+      ],
+      "org": "Centro de Estudios  Pomote de Unaula",
+      "created": "2026-02-06",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS",
+        "LAND_USE"
+      ],
+      "areaSqKm": 14.77,
+      "centroid": [
+        -75.5661,
+        6.2006
+      ],
+      "pctMapped": 1,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42048,
+      "name": "Budumba subcounty- Butaleja District- Climate Change Mapping.",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Uganda"
+      ],
+      "org": "MapUganda",
+      "created": "2026-02-11",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "OTHER"
+      ],
+      "areaSqKm": 83.32,
+      "centroid": [
+        33.8295,
+        0.7953
+      ],
+      "pctMapped": 4,
+      "pctValidated": 0,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43962,
+      "name": "Mapping Doblogonno for Resilience and Smart City Development",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Ghana"
+      ],
+      "org": "OSM Ghana",
+      "created": "2026-02-24",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 24.16,
+      "centroid": [
+        -0.3282,
+        5.6829
+      ],
+      "pctMapped": 1,
+      "pctValidated": 0,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 41586,
+      "name": "Mapeamento de Assentamentos Humano no Munic\u00edpio da Vila de Boane \u2013 Bairros Campoane e Belo-Horizonte",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "Rede Juvenil para Resili\u00eancia Comunit\u00e1ria",
+      "created": "2026-02-08",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "LAND_USE",
+        "WATERWAYS",
+        "OTHER"
+      ],
+      "areaSqKm": 15.24,
+      "centroid": [
+        32.4091,
+        -26.0149
+      ],
+      "pctMapped": 59,
+      "pctValidated": 34,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 39870,
+      "name": "Kacyiru Open Mapping community updates by Rwanda Youth Mappers ",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Rwanda"
+      ],
+      "org": "EcoMappers, OSM Rwanda",
+      "created": "2026-01-25",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS",
+        "LAND_USE"
+      ],
+      "areaSqKm": 1.15,
+      "centroid": [
+        30.093,
+        -1.9491
+      ],
+      "pctMapped": 47,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42642,
+      "name": "AMC (Mapping for Climate Restoration) \u2013 Munyaga Sector, Rwamagana",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Rwanda"
+      ],
+      "org": "TomTom",
+      "created": "2026-02-14",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 41.59,
+      "centroid": [
+        30.4553,
+        -2.0326
+      ],
+      "pctMapped": 59,
+      "pctValidated": 0,
+      "difficulty": "EASY",
+      "priority": "HIGH"
+    },
+    {
+      "id": 35514,
+      "name": "Mapping Communities That May Be Affected by Mineral Exploration in Kasiya, Malawi",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Malawi"
+      ],
+      "org": "OSM Malawi",
+      "created": "2025-11-13",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 543.08,
+      "centroid": [
+        33.368,
+        -13.7139
+      ],
+      "pctMapped": 8,
+      "pctValidated": 1,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 29475,
+      "name": "Missing Maps: Roads in Twic County, South Sudan (1)",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "South Sudan"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2025-09-09",
+      "mappingTypes": [
+        "ROADS"
+      ],
+      "areaSqKm": 844.95,
+      "centroid": [
+        28.33,
+        9.1698
+      ],
+      "pctMapped": 99,
+      "pctValidated": 65,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43599,
+      "name": "AMC2026 - Mapping Benin City for Resilience and Smart City Development - Part 8",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Nigeria"
+      ],
+      "org": "Unique Mappers Network, Nigeria",
+      "created": "2026-02-21",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 32.8,
+      "centroid": [
+        5.6677,
+        6.1978
+      ],
+      "pctMapped": 100,
+      "pctValidated": 100,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 42543,
+      "name": "Mapping Benin City for Resilience and Smart City Development  - Part 2",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Nigeria"
+      ],
+      "org": "TomTom",
+      "created": "2026-02-13",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 14.36,
+      "centroid": [
+        5.6168,
+        6.2291
+      ],
+      "pctMapped": 39,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 15188,
+      "name": "Missing Maps: N'Djamena, Chad (3)",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Chad"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2023-07-18",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 68.1,
+      "centroid": [
+        15.1117,
+        12.1336
+      ],
+      "pctMapped": 69,
+      "pctValidated": 53,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 15362,
+      "name": "2023-202424 Flood in Gunsan, South Korea, mapping roads and buildings",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "South Korea"
+      ],
+      "org": "\ud55c\uad6d OSM (OSM Korea)",
+      "created": "2023-08-06",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "LAND_USE"
+      ],
+      "areaSqKm": 442.76,
+      "centroid": [
+        126.7235,
+        35.9522
+      ],
+      "pctMapped": 98,
+      "pctValidated": 39,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 18443,
+      "name": "The 2023-2024 Flood in Gimje, South Korea, mapping roads and buildings",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "South Korea"
+      ],
+      "org": "\ud55c\uad6d OSM (OSM Korea)",
+      "created": "2025-02-23",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "LAND_USE"
+      ],
+      "areaSqKm": 676.21,
+      "centroid": [
+        126.8331,
+        35.8069
+      ],
+      "pctMapped": 84,
+      "pctValidated": 12,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43500,
+      "name": "Katikamu sub-county - Luwero District- Climate Change Mapping.",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Uganda"
+      ],
+      "org": "MapUganda",
+      "created": "2026-02-21",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "OTHER"
+      ],
+      "areaSqKm": 150.99,
+      "centroid": [
+        32.5396,
+        0.737
+      ],
+      "pctMapped": 17,
+      "pctValidated": 0,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42444,
+      "name": "Madagascar Toamasina 1: TC GEZANI 26 - PRIORITY 2",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Madagascar"
+      ],
+      "org": "Open Mapping Hub ESA",
+      "created": "2026-02-13",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 8.37,
+      "centroid": [
+        49.4098,
+        -18.1503
+      ],
+      "pctMapped": 0,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 43139,
+      "name": "Settlement Areas for Emergency basemaps -Myaing Township - Magway Region",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Myanmar"
+      ],
+      "org": "myOSM",
+      "created": "2026-02-17",
+      "mappingTypes": [
+        "LAND_USE"
+      ],
+      "areaSqKm": 2033.89,
+      "centroid": [
+        94.8492,
+        21.6556
+      ],
+      "pctMapped": 7,
+      "pctValidated": 6,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43632,
+      "name": "AMC - Dallol Bosso Wetland Mapping, Niger Republic for Resilience and Smart City Development",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Niger"
+      ],
+      "org": "TomTom",
+      "created": "2026-02-21",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 21.17,
+      "centroid": [
+        2.9042,
+        12.8481
+      ],
+      "pctMapped": 30,
+      "pctValidated": 6,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43929,
+      "name": "Spain Floods 2026: Landuse in Sierra de Grazalema and Ronda",
+      "status": "PUBLISHED",
+      "imagery": "Other",
+      "imageryRaw": "PNOA-Spain-TMS",
+      "country": [
+        "Spain"
+      ],
+      "org": "OSM Espa\u00f1a",
+      "created": "2026-02-24",
+      "mappingTypes": [
+        "LAND_USE"
+      ],
+      "areaSqKm": 2167.11,
+      "centroid": [
+        -5.2924,
+        36.7636
+      ],
+      "pctMapped": 0,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 37362,
+      "name": "Building Mapping: Aceh, Sumatera Disaster Response",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Indonesia"
+      ],
+      "org": "Perkumpulan OpenStreetMap Indonesia",
+      "created": "2025-12-04",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 4810.11,
+      "centroid": [
+        96.9064,
+        4.4998
+      ],
+      "pctMapped": 84,
+      "pctValidated": 34,
+      "difficulty": "EASY",
+      "priority": "URGENT"
+    },
+    {
+      "id": 36537,
+      "name": "Disaster Response in North Sumatera Indonesia: Building Mapping 1",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Indonesia"
+      ],
+      "org": "Perkumpulan OpenStreetMap Indonesia",
+      "created": "2025-11-27",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 2646.31,
+      "centroid": [
+        98.3204,
+        3.6737
+      ],
+      "pctMapped": 87,
+      "pctValidated": 86,
+      "difficulty": "EASY",
+      "priority": "URGENT"
+    },
+    {
+      "id": 43335,
+      "name": "Africa Map Cup 2026 | Mapping the Unmapped: MOZAMBIQUE 8",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "GeoTE Tanzania",
+      "created": "2026-02-19",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1.77,
+      "centroid": [
+        35.2914,
+        -13.0409
+      ],
+      "pctMapped": 90,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 16846,
+      "name": "Commune de Banikoara",
+      "status": "PUBLISHED",
+      "imagery": "Not specified",
+      "imageryRaw": "",
+      "country": [
+        "Benin"
+      ],
+      "org": "OSM Benin",
+      "created": "2024-05-25",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS",
+        "LAND_USE",
+        "OTHER"
+      ],
+      "areaSqKm": 4335.29,
+      "centroid": [
+        2.4144,
+        11.355
+      ],
+      "pctMapped": 0,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 37923,
+      "name": "Al-Hasaka 10",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Syria"
+      ],
+      "org": "Netherlands Red Cross",
+      "created": "2025-12-15",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1897.07,
+      "centroid": [
+        41.9266,
+        36.887
+      ],
+      "pctMapped": 21,
+      "pctValidated": 0,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 15490,
+      "name": "ZuunKharaaMapathon2023",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Mongolia"
+      ],
+      "org": "Public Lab Mongolia",
+      "created": "2023-09-12",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS",
+        "LAND_USE",
+        "OTHER"
+      ],
+      "areaSqKm": 29.06,
+      "centroid": [
+        106.4715,
+        48.8394
+      ],
+      "pctMapped": 76,
+      "pctValidated": 1,
+      "difficulty": "EASY",
+      "priority": "LOW"
+    },
+    {
+      "id": 42081,
+      "name": "OSM Universite Ligi - Bursa - Missing Buildings",
+      "status": "PUBLISHED",
+      "imagery": "Mapbox",
+      "imageryRaw": "Mapbox",
+      "country": [
+        "Turkey"
+      ],
+      "org": "Yer Cizenler",
+      "created": "2026-02-11",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 9.71,
+      "centroid": [
+        28.9109,
+        40.2243
+      ],
+      "pctMapped": 10,
+      "pctValidated": 9,
+      "difficulty": "EASY",
+      "priority": "LOW"
+    },
+    {
+      "id": 36341,
+      "name": "Elgeyo Marakwet South B - Mapping for disaster resilience",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Kenya"
+      ],
+      "org": "Kenya Red Cross",
+      "created": "2025-11-25",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS",
+        "WATERWAYS",
+        "LAND_USE"
+      ],
+      "areaSqKm": 425.61,
+      "centroid": [
+        35.5292,
+        0.5615
+      ],
+      "pctMapped": 17,
+      "pctValidated": 1,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 33963,
+      "name": "Missing Maps: buildings in north C\u00f4te d\u2019Ivoire (3)",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "C\u00f4te d'Ivoire"
+      ],
+      "org": "M\u00e9decins Sans Fronti\u00e8res (MSF) ",
+      "created": "2025-11-03",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 369.75,
+      "centroid": [
+        -5.2176,
+        10.0487
+      ],
+      "pctMapped": 93,
+      "pctValidated": 92,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 17989,
+      "name": "Thwake Dam Catchment Solid Waste Mapping 5",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Kenya"
+      ],
+      "org": "National Environment Management Authority (NEMA) Kenya",
+      "created": "2024-11-05",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS"
+      ],
+      "areaSqKm": 269.57,
+      "centroid": [
+        36.8498,
+        -1.0984
+      ],
+      "pctMapped": 7,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43269,
+      "name": "Mapping Building Footprints for Pantanaw Township, Ayeyarwady Region",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Myanmar"
+      ],
+      "org": "myOSM",
+      "created": "2026-02-18",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1330.86,
+      "centroid": [
+        95.402,
+        16.9664
+      ],
+      "pctMapped": 12,
+      "pctValidated": 9,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42180,
+      "name": "Respuesta inundaci\u00f3n C\u00f3rdoba, Monter\u00eda, Colombia",
+      "status": "PUBLISHED",
+      "imagery": "Other",
+      "imageryRaw": "wms:https://mapas2.igac.gov.co/image/services/orto/orto23001monteria/ImageServer/WMSServer?FORMAT=image/png&TRANSPARENT=TRUE&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetMap&LAYERS=orto23001monteria:None&STYLES=&CRS={proj}&WIDTH={width}&HEIGHT={height}&BBOX={bbox}",
+      "country": [
+        "Colombia"
+      ],
+      "org": "Comunidad OSM Colombia",
+      "created": "2026-02-11",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS"
+      ],
+      "areaSqKm": 57.99,
+      "centroid": [
+        -75.8723,
+        8.7644
+      ],
+      "pctMapped": 18,
+      "pctValidated": 0,
+      "difficulty": "CHALLENGING",
+      "priority": "HIGH"
+    },
+    {
+      "id": 39540,
+      "name": "Mapping Hidden Waterways - Quezon City 1",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Philippines"
+      ],
+      "org": "OSM Philippines",
+      "created": "2026-01-19",
+      "mappingTypes": [
+        "WATERWAYS"
+      ],
+      "areaSqKm": 16.66,
+      "centroid": [
+        121.0748,
+        14.7229
+      ],
+      "pctMapped": 25,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 41487,
+      "name": "MAP Namibe for Resilience and Smart City Development - Part 2",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Angola"
+      ],
+      "org": "TomTom",
+      "created": "2026-02-07",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 505.43,
+      "centroid": [
+        12.2113,
+        -15.2628
+      ],
+      "pctMapped": 17,
+      "pctValidated": 5,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 43401,
+      "name": "Lebanon - Woodland Mapping 2",
+      "status": "PUBLISHED",
+      "imagery": "Not specified",
+      "imageryRaw": "",
+      "country": [
+        "Lebanon"
+      ],
+      "org": "OSM Lebanon",
+      "created": "2026-02-20",
+      "mappingTypes": [
+        "LAND_USE"
+      ],
+      "areaSqKm": 170.68,
+      "centroid": [
+        36.0973,
+        34.4198
+      ],
+      "pctMapped": 99,
+      "pctValidated": 0,
+      "difficulty": "EASY",
+      "priority": "LOW"
+    },
+    {
+      "id": 43534,
+      "name": "Community Resource Mapping for Resilience (TA Chiwoko)",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImageryClarity",
+      "country": [
+        "Malawi"
+      ],
+      "org": "OSM Malawi",
+      "created": "2026-02-21",
+      "mappingTypes": [
+        "ROADS",
+        "BUILDINGS",
+        "WATERWAYS"
+      ],
+      "areaSqKm": 397.42,
+      "centroid": [
+        33.9374,
+        -13.8573
+      ],
+      "pctMapped": 86,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 22216,
+      "name": "Mapping Izzi Local Government Area for Social Good - AfricaMaps30/90 Mapping Campaign",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Nigeria"
+      ],
+      "org": "EcoMappers, OSM Rwanda",
+      "created": "2025-06-05",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1048.01,
+      "centroid": [
+        8.2723,
+        6.5093
+      ],
+      "pctMapped": 67,
+      "pctValidated": 46,
+      "difficulty": "EASY",
+      "priority": "LOW"
+    },
+    {
+      "id": 36933,
+      "name": "Building Footprint Mapping | Southern Thailand Floods 2025 (2)",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Thailand"
+      ],
+      "org": "Open Mapping Hub Asia-Pacific",
+      "created": "2025-11-29",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1072.29,
+      "centroid": [
+        99.4541,
+        8.2267
+      ],
+      "pctMapped": 97,
+      "pctValidated": 34,
+      "difficulty": "EASY",
+      "priority": "LOW"
+    },
+    {
+      "id": 42147,
+      "name": "Africa Map Cup 2026 | Mapping the Unmapped: MOZAMBIQUE 4",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Mozambique"
+      ],
+      "org": "GeoTE Tanzania",
+      "created": "2026-02-11",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 83.58,
+      "centroid": [
+        35.2602,
+        -13.304
+      ],
+      "pctMapped": 77,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 43731,
+      "name": "Mapping Physical Infrastructure to Support Community Resilience and Preparation to Urban Flooding in Lilongwe (Mtandire Ward)",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImageryClarity",
+      "country": [
+        "Malawi"
+      ],
+      "org": "OSM Malawi",
+      "created": "2026-02-24",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS",
+        "WATERWAYS"
+      ],
+      "areaSqKm": 8.93,
+      "centroid": [
+        33.7265,
+        -13.9535
+      ],
+      "pctMapped": 100,
+      "pctValidated": 0,
+      "difficulty": "MODERATE",
+      "priority": "MEDIUM"
+    },
+    {
+      "id": 42378,
+      "name": "AMC2026 - Mapping Benin City for Resilience and Smart City Development - Part 4",
+      "status": "PUBLISHED",
+      "imagery": "Bing",
+      "imageryRaw": "Bing",
+      "country": [
+        "Nigeria"
+      ],
+      "org": "Unique Mappers Network, Nigeria",
+      "created": "2026-02-12",
+      "mappingTypes": [
+        "BUILDINGS",
+        "ROADS"
+      ],
+      "areaSqKm": 14.35,
+      "centroid": [
+        5.6063,
+        6.2578
+      ],
+      "pctMapped": 100,
+      "pctValidated": 100,
+      "difficulty": "MODERATE",
+      "priority": "HIGH"
+    },
+    {
+      "id": 43137,
+      "name": "Mapping Building Footprints for Maubin Township, Ayeyarwady Region",
+      "status": "PUBLISHED",
+      "imagery": "Esri",
+      "imageryRaw": "EsriWorldImagery",
+      "country": [
+        "Myanmar"
+      ],
+      "org": "myOSM",
+      "created": "2026-02-17",
+      "mappingTypes": [
+        "BUILDINGS"
+      ],
+      "areaSqKm": 1317.65,
+      "centroid": [
+        95.6687,
+        16.7247
+      ],
+      "pctMapped": 32,
+      "pctValidated": 29,
+      "difficulty": "EASY",
+      "priority": "MEDIUM"
+    }
+  ]
+}

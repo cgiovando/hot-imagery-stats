@@ -4,18 +4,26 @@
 window.DashboardData = (function () {
   'use strict';
 
-  var DATA_URL =
-    'https://insta-tm.s3.us-east-1.amazonaws.com/projects_summary.json';
+  var S3_URL = 'https://insta-tm.s3.us-east-1.amazonaws.com/projects_summary.json';
+  var LOCAL_URL = 'projects_summary.json';
+  var DATA_URL = S3_URL;
 
   var rawData = null;
   var allProjects = [];
   var filteredProjects = [];
 
   function loadData() {
-    return fetch(DATA_URL)
+    return fetch(S3_URL)
       .then(function (response) {
-        if (!response.ok) throw new Error('Failed to load data: ' + response.status);
+        if (!response.ok) throw response;
         return response.json();
+      })
+      .catch(function () {
+        // Fall back to local sample data
+        return fetch(LOCAL_URL).then(function (response) {
+          if (!response.ok) throw new Error('Failed to load data from S3 and local fallback');
+          return response.json();
+        });
       })
       .then(function (data) {
         rawData = data;
