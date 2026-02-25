@@ -48,12 +48,10 @@ window.DashboardData = (function () {
   function applyFilters(filters) {
     filteredProjects = allProjects.filter(function (p) {
       // Year filter
-      if (p.created) {
+      if (filters.year) {
+        if (!p.created) return false;
         var year = parseInt(p.created.substring(0, 4), 10);
-        if (filters.yearFrom && year < filters.yearFrom) return false;
-        if (filters.yearTo && year > filters.yearTo) return false;
-      } else {
-        if (filters.yearFrom || filters.yearTo) return false;
+        if (year !== filters.year) return false;
       }
 
       // Imagery

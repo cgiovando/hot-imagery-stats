@@ -7,8 +7,7 @@ window.DashboardFilters = (function () {
   var onFilterChange = null;
 
   var FILTER_IDS = [
-    'filter-year-from',
-    'filter-year-to',
+    'filter-year',
     'filter-imagery',
     'filter-country',
     'filter-org',
@@ -30,9 +29,7 @@ window.DashboardFilters = (function () {
   function populateDropdowns() {
     var Data = window.DashboardData;
 
-    var years = Data.getUniqueYears();
-    populateSelect('filter-year-from', years, 'From');
-    populateSelect('filter-year-to', years, 'To');
+    populateSelect('filter-year', Data.getUniqueYears(), 'All years');
 
     populateSelect('filter-imagery', Data.getUniqueValues('imagery'), 'All sources');
     populateSelect('filter-country', Data.getUniqueValues('country'), 'All countries');
@@ -61,8 +58,7 @@ window.DashboardFilters = (function () {
 
   function getCurrentFilters() {
     return {
-      yearFrom: getSelectValue('filter-year-from', true),
-      yearTo: getSelectValue('filter-year-to', true),
+      year: getSelectValue('filter-year', true),
       imagery: getSelectValue('filter-imagery'),
       country: getSelectValue('filter-country'),
       org: getSelectValue('filter-org'),
