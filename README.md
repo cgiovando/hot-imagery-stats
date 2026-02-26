@@ -60,9 +60,9 @@ python3 -m http.server 8000 -d docs
 
 Then open `http://localhost:8000`
 
-### Fetch Sample Data for Testing
+### Fetch Fresh Data for Testing
 
-To test with fresh data from the Tasking Manager API:
+To test with the latest data from the Tasking Manager API:
 
 ```bash
 python3 -m venv .venv
@@ -71,7 +71,7 @@ pip install -r requirements.txt
 python scripts/fetch_sample.py
 ```
 
-This fetches the 100 most recent projects and writes `docs/projects_summary.json`.
+This fetches the 100 most recent projects and writes `docs/projects_summary.json`. The committed version contains the full dataset (~13,000 projects).
 
 ## Project Structure
 
@@ -86,7 +86,7 @@ docs/                        # GitHub Pages root
 │   ├── map.js               # MapLibre + PMTiles map
 │   └── app.js               # Initialization
 ├── img/hot-logo.svg         # HOT logo
-└── projects_summary.json    # Sample data (fallback)
+└── projects_summary.json    # Full dataset (S3 fallback)
 scripts/
 └── fetch_sample.py          # Fetch sample data from TM API
 ```
