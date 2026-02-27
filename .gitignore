@@ -23,3 +23,6 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Project docs (local only, may contain sensitive context)
+CLAUDE.md
