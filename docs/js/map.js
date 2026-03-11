@@ -1,32 +1,12 @@
 /**
- * Map module — MapLibre GL JS with PMTiles project boundaries and centroid markers.
+ * Map module — MapLibre GL JS with centroid markers colored by imagery source.
  */
 window.DashboardMap = (function () {
   'use strict';
 
-  var PMTILES_URL =
-    'https://insta-tm.s3.us-east-1.amazonaws.com/projects.pmtiles';
-
-  var IMAGERY_MATCH = [
-    'match',
-    ['get', 'imagery'],
-    'Bing', '#d73f3f',
-    'Esri', '#2b83ba',
-    'Mapbox', '#4264fb',
-    'Maxar', '#ff8c00',
-    'Custom', '#7b7b7b',
-    'Other', '#a3a3a3',
-    'Not specified', '#d4d4d4',
-    '#d4d4d4', // default
-  ];
-
   var map = null;
 
   function init() {
-    // Register PMTiles protocol
-    var protocol = new pmtiles.Protocol();
-    maplibregl.addProtocol('pmtiles', protocol.tile);
-
     map = new maplibregl.Map({
       container: 'map',
       style: {
@@ -58,35 +38,6 @@ window.DashboardMap = (function () {
     map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
     map.on('load', function () {
-      // PMTiles project boundaries
-      map.addSource('projects-boundaries', {
-        type: 'vector',
-        url: 'pmtiles://' + PMTILES_URL,
-      });
-
-      map.addLayer({
-        id: 'projects-fill',
-        type: 'fill',
-        source: 'projects-boundaries',
-        'source-layer': 'projects',
-        paint: {
-          'fill-color': IMAGERY_MATCH,
-          'fill-opacity': 0.35,
-        },
-      });
-
-      map.addLayer({
-        id: 'projects-outline',
-        type: 'line',
-        source: 'projects-boundaries',
-        'source-layer': 'projects',
-        paint: {
-          'line-color': IMAGERY_MATCH,
-          'line-width': 1,
-          'line-opacity': 0.6,
-        },
-      });
-
       // Centroid markers (from summary data, updated on filter)
       map.addSource('project-centroids', {
         type: 'geojson',
@@ -130,7 +81,7 @@ window.DashboardMap = (function () {
         var coords = e.features[0].geometry.coordinates.slice();
 
         var area = props.areaSqKm
-          ? Number(props.areaSqKm).toLocaleString() + ' km²'
+          ? Number(props.areaSqKm).toLocaleString() + ' km\u00b2'
           : 'N/A';
 
         var html =

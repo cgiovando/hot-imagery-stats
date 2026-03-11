@@ -37,7 +37,6 @@ Project data is sourced from the [HOT Tasking Manager API](https://tasking-manag
 - **Vanilla HTML/JS** — No build step, served as a static site
 - [Tailwind CSS](https://tailwindcss.com/) — Styling via CDN
 - [MapLibre GL JS](https://maplibre.org/) — Interactive map rendering
-- [PMTiles](https://protomaps.com/docs/pmtiles) — Efficient vector tile access
 - [Chart.js](https://www.chartjs.org/) — Data visualizations
 - [insta-tm](https://github.com/cgiovando/insta-tm) — TM data pipeline
 
@@ -83,7 +82,7 @@ docs/                        # GitHub Pages root
 │   ├── data.js              # Data fetching and filtering
 │   ├── filters.js           # Filter UI
 │   ├── charts.js            # Chart.js visualizations
-│   ├── map.js               # MapLibre + PMTiles map
+│   ├── map.js               # MapLibre map with centroid markers
 │   └── app.js               # Initialization
 ├── img/hot-logo.svg         # HOT logo
 └── projects_summary.json    # Full dataset (S3 fallback)
