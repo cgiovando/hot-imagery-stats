@@ -92,7 +92,7 @@ scripts/
 
 ## Deployment
 
-The dashboard is deployed via GitHub Pages from the `main` branch `/docs` folder. Data updates automatically when the [insta-tm](https://github.com/cgiovando/insta-tm) ETL runs daily.
+The dashboard is deployed via GitHub Pages from the `main` branch `/docs` folder. A [daily GitHub Action](.github/workflows/update-data.yml) regenerates `docs/projects_summary.json` from S3-cached project data (populated by the [insta-tm](https://github.com/cgiovando/insta-tm) ETL) and commits it to the repo.
 
 ## AI-Generated Code Disclaimer
 

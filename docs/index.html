@@ -24,8 +24,9 @@
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.css">
   <script src="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.js"></script>
 
-  <!-- Chart.js -->
+  <!-- Chart.js (primary CDN with fallback) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script>window.Chart || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.7/chart.umd.min.js"><\/script>')</script>
 
   <!-- Custom styles -->
   <link rel="stylesheet" href="css/dashboard.css">
@@ -121,7 +122,7 @@
     <div class="relative">
       <div id="map"></div>
       <!-- Map legend -->
-      <div class="map-legend absolute bottom-4 right-4 z-10">
+      <div class="map-legend absolute bottom-4 left-4 z-10">
         <div class="map-legend-title">Imagery Source</div>
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#d73f3f"></span> Bing</div>
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#2b83ba"></span> Esri</div>
