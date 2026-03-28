@@ -3,20 +3,26 @@
 
 Reads individual project JSONs from s3://insta-tm/api/v2/projects/
 (populated daily by the insta-tm ETL), extracts summary fields, and
-writes the dashboard data file. Uses concurrent downloads to process
-~14K projects in ~10 minutes.
+writes the dashboard data file.
+
+Incremental mode (default): loads the previously committed summary as
+a baseline, then fetches only projects that are new or modified since
+the last run. Falls back to full rebuild if the baseline is missing,
+too old, or has a different schema version.
 
 Usage:
-    python scripts/generate_summary.py
+    python scripts/generate_summary.py          # incremental (default)
+    python scripts/generate_summary.py --full   # force full rebuild
 """
 
 import json
 import re
 import sys
+import tempfile
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import boto3
@@ -28,6 +34,12 @@ PREFIX = "api/v2/projects/"
 OUTPUT = Path(__file__).resolve().parent.parent / "docs" / "projects_summary.json"
 
 GEOD = Geod(ellps="WGS84")
+
+# Bump this when build_summary() output schema changes to force a full rebuild
+SCHEMA_VERSION = 2
+
+# How far back to look beyond the baseline timestamp to catch stragglers
+OVERLAP_BUFFER_HOURS = 24
 
 IMAGERY_PATTERNS = [
     (re.compile(r"bing", re.IGNORECASE), "Bing"),
@@ -100,7 +112,59 @@ def build_summary(details):
     }
 
 
+def extract_project_id(key):
+    """Extract numeric project ID from an S3 key like 'api/v2/projects/12345.json'."""
+    name = key.rsplit("/", 1)[-1]
+    return name.replace(".json", "")
+
+
+def load_baseline():
+    """Load the existing summary as a baseline. Returns (tm_projects_by_id, generated_ts, valid)."""
+    if not OUTPUT.exists():
+        return {}, None, False
+
+    try:
+        with open(OUTPUT) as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"Warning: baseline corrupt or unreadable: {e}", file=sys.stderr)
+        return {}, None, False
+
+    # Check schema version
+    if data.get("schemaVersion") != SCHEMA_VERSION:
+        print(f"Baseline schema version mismatch (got {data.get('schemaVersion')}, "
+              f"need {SCHEMA_VERSION}), forcing full rebuild")
+        return {}, None, False
+
+    # Parse generated timestamp
+    generated_ts = None
+    generated_str = data.get("generated", "")
+    if generated_str:
+        try:
+            generated_ts = datetime.fromisoformat(generated_str.replace("Z", "+00:00"))
+        except ValueError:
+            pass
+
+    # Check staleness (>7 days = force full rebuild)
+    if generated_ts:
+        age_days = (datetime.now(timezone.utc) - generated_ts).total_seconds() / 86400
+        if age_days > 7:
+            print(f"Baseline is {age_days:.0f} days old, forcing full rebuild")
+            return {}, None, False
+
+    # Extract TM projects by sourceId
+    tm_by_id = {}
+    for p in data.get("projects", []):
+        if p.get("tool") == "tm" and p.get("sourceId") is not None:
+            tm_by_id[str(p["sourceId"])] = p
+
+    print(f"Loaded baseline: {len(tm_by_id)} TM projects (generated {generated_str})")
+    return tm_by_id, generated_ts, True
+
+
 def main():
+    full_rebuild = "--full" in sys.argv
+
     thread_local = threading.local()
 
     def get_s3():
@@ -110,47 +174,106 @@ def main():
 
     s3 = boto3.client("s3", region_name="us-east-1")
 
-    # List all project keys
+    # List all S3 keys with their LastModified timestamps
     print("Listing project files on S3...", flush=True)
-    keys = []
+    s3_objects = {}  # key -> LastModified
     paginator = s3.get_paginator("list_objects_v2")
     for page in paginator.paginate(Bucket=BUCKET, Prefix=PREFIX):
         for obj in page.get("Contents", []):
-            keys.append(obj["Key"])
+            s3_objects[obj["Key"]] = obj["LastModified"]
 
-    print(f"Found {len(keys)} project files", flush=True)
+    s3_ids = {extract_project_id(k) for k in s3_objects}
+    print(f"Found {len(s3_objects)} project files on S3", flush=True)
 
-    # Process concurrently
-    projects = []
+    # Decide: incremental or full
+    baseline, baseline_ts, baseline_valid = {}, None, False
+    if not full_rebuild:
+        baseline, baseline_ts, baseline_valid = load_baseline()
+
+    if not baseline_valid:
+        full_rebuild = True
+
+    if full_rebuild:
+        keys_to_fetch = list(s3_objects.keys())
+        print(f"Full rebuild: fetching all {len(keys_to_fetch)} projects")
+    else:
+        # Compute watermark: baseline timestamp minus overlap buffer
+        watermark = baseline_ts - timedelta(hours=OVERLAP_BUFFER_HOURS)
+        baseline_ids = set(baseline.keys())
+
+        # Fetch: recently modified OR missing from baseline
+        keys_to_fetch = []
+        modified_count = 0
+        missing_count = 0
+        for key, last_modified in s3_objects.items():
+            pid = extract_project_id(key)
+            if last_modified >= watermark:
+                keys_to_fetch.append(key)
+                modified_count += 1
+            elif pid not in baseline_ids:
+                keys_to_fetch.append(key)
+                missing_count += 1
+
+        # Detect deletions
+        deleted_ids = baseline_ids - s3_ids
+        if deleted_ids:
+            print(f"  {len(deleted_ids)} projects deleted from S3, removing from baseline")
+            for did in deleted_ids:
+                baseline.pop(did, None)
+
+        print(f"Incremental: {len(keys_to_fetch)} to fetch "
+              f"({modified_count} modified since {watermark.isoformat()}, "
+              f"{missing_count} missing from baseline, "
+              f"{len(deleted_ids)} deleted)")
+
+    # Fetch and process
+    t0 = time.time()
+    fetched = []
     errors = 0
     done = 0
-    t0 = time.time()
 
     def fetch_and_summarize(key):
         resp = get_s3().get_object(Bucket=BUCKET, Key=key)
         details = json.loads(resp["Body"].read())
         return build_summary(details)
 
-    with ThreadPoolExecutor(max_workers=20) as pool:
-        futures = {pool.submit(fetch_and_summarize, k): k for k in keys}
-        for future in as_completed(futures):
-            done += 1
-            if done % 500 == 0 or done == 1:
-                elapsed = time.time() - t0
-                rate = done / elapsed if elapsed > 0 else 0
-                eta = (len(keys) - done) / rate if rate > 0 else 0
-                print(
-                    f"  {done}/{len(keys)} ({rate:.0f}/s, ETA {eta:.0f}s)...",
-                    flush=True,
-                )
-            try:
-                summary = future.result()
-                if summary["uid"] is not None:
-                    projects.append(summary)
-            except Exception as e:
-                errors += 1
-                if errors <= 5:
-                    print(f"  Error on {futures[future]}: {e}", file=sys.stderr)
+    if keys_to_fetch:
+        with ThreadPoolExecutor(max_workers=20) as pool:
+            futures = {pool.submit(fetch_and_summarize, k): k for k in keys_to_fetch}
+            for future in as_completed(futures):
+                done += 1
+                if done % 500 == 0 or done == 1 or done == len(keys_to_fetch):
+                    elapsed = time.time() - t0
+                    rate = done / elapsed if elapsed > 0 else 0
+                    eta = (len(keys_to_fetch) - done) / rate if rate > 0 else 0
+                    print(
+                        f"  {done}/{len(keys_to_fetch)} ({rate:.0f}/s, ETA {eta:.0f}s)...",
+                        flush=True,
+                    )
+                try:
+                    summary = future.result()
+                    if summary["uid"] is not None:
+                        fetched.append(summary)
+                except Exception as e:
+                    errors += 1
+                    if errors <= 5:
+                        print(f"  Error on {futures[future]}: {e}", file=sys.stderr)
+
+    fetch_elapsed = time.time() - t0
+
+    # Build final TM project list
+    if full_rebuild:
+        projects = [p for p in fetched if p["uid"] is not None]
+    else:
+        # Upsert fetched projects into baseline
+        for p in fetched:
+            sid = str(p["sourceId"])
+            baseline[sid] = p
+        projects = list(baseline.values())
+
+    tm_count = len(projects)
+    print(f"\nTM: {tm_count} projects ({len(fetched)} fetched, "
+          f"{errors} errors, {fetch_elapsed:.1f}s)")
 
     # Merge MapSwipe data if available
     mapswipe_file = OUTPUT.parent / "mapswipe_summary.json"
@@ -162,7 +285,7 @@ def main():
                 ms_data = json.load(f)
             ms_projects = ms_data.get("projects", [])
 
-            # Check staleness: warn if MapSwipe data is more than 48 hours old
+            # Check staleness
             ms_generated = ms_data.get("generated", "")
             if ms_generated:
                 try:
@@ -180,26 +303,35 @@ def main():
 
             projects.extend(ms_projects)
             ms_count = len(ms_projects)
-            print(f"\nMerged {ms_count} MapSwipe projects" +
+            print(f"MapSwipe: {ms_count} projects" +
                   (" (STALE)" if ms_stale else ""))
         except Exception as e:
             print(f"\nWarning: could not load MapSwipe data: {e}", file=sys.stderr)
     else:
-        print("\nNo MapSwipe data found (docs/mapswipe_summary.json), TM only")
+        print("No MapSwipe data found (docs/mapswipe_summary.json), TM only")
 
-    # Sort after merge, using str for sourceId to avoid int/str comparison errors
+    # Sort after merge
     projects.sort(key=lambda p: (p.get("tool", "tm"), str(p.get("sourceId", ""))))
 
     output = {
+        "schemaVersion": SCHEMA_VERSION,
         "generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "totalProjects": len(projects),
         "projects": projects,
     }
 
-    with open(OUTPUT, "w") as f:
-        json.dump(output, f)
+    # Write via temp file + rename to avoid corrupt baselines
+    tmp_fd, tmp_path = tempfile.mkstemp(
+        dir=OUTPUT.parent, suffix=".json", prefix=".projects_summary_"
+    )
+    try:
+        with open(tmp_fd, "w") as f:
+            json.dump(output, f)
+        Path(tmp_path).replace(OUTPUT)
+    except Exception:
+        Path(tmp_path).unlink(missing_ok=True)
+        raise
 
-    tm_count = len(projects) - ms_count
     print(f"\nDone. {len(projects)} projects written to {OUTPUT}")
     print(f"  TM: {tm_count}, MapSwipe: {ms_count}, Errors: {errors}")
 
