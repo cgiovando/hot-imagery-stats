@@ -1,4 +1,6 @@
 boto3
+pycountry
 pyproj
 requests
+reverse_geocoder
 shapely

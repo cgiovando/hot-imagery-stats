@@ -76,8 +76,11 @@ def build_summary(details):
     project_info = details.get("projectInfo", {}) or {}
 
     return {
-        "id": project_id,
+        "uid": f"tm-{project_id}" if project_id else None,
+        "sourceId": project_id,
         "name": project_info.get("name", ""),
+        "tool": "tm",
+        "toolLabel": "Tasking Manager",
         "status": details.get("status"),
         "imagery": normalize_imagery(details.get("imagery")),
         "country": country_tag,
@@ -86,6 +89,10 @@ def build_summary(details):
         "mappingTypes": details.get("mappingTypes", []),
         "areaSqKm": compute_area_sqkm(aoi) if aoi else None,
         "centroid": compute_centroid(aoi) if aoi else None,
+        "projectUrl": f"https://tasks.hotosm.org/projects/{project_id}" if project_id else None,
+        "projectType": None,
+        "contributors": None,
+        "results": None,
         "pctMapped": details.get("percentMapped"),
         "pctValidated": details.get("percentValidated"),
         "difficulty": details.get("difficulty"),
@@ -138,14 +145,50 @@ def main():
                 )
             try:
                 summary = future.result()
-                if summary["id"] is not None:
+                if summary["uid"] is not None:
                     projects.append(summary)
             except Exception as e:
                 errors += 1
                 if errors <= 5:
                     print(f"  Error on {futures[future]}: {e}", file=sys.stderr)
 
-    projects.sort(key=lambda p: p["id"])
+    # Merge MapSwipe data if available
+    mapswipe_file = OUTPUT.parent / "mapswipe_summary.json"
+    ms_count = 0
+    ms_stale = False
+    if mapswipe_file.exists():
+        try:
+            with open(mapswipe_file) as f:
+                ms_data = json.load(f)
+            ms_projects = ms_data.get("projects", [])
+
+            # Check staleness: warn if MapSwipe data is more than 48 hours old
+            ms_generated = ms_data.get("generated", "")
+            if ms_generated:
+                try:
+                    ms_ts = datetime.fromisoformat(ms_generated.replace("Z", "+00:00"))
+                    age_hours = (datetime.now(timezone.utc) - ms_ts).total_seconds() / 3600
+                    if age_hours > 48:
+                        ms_stale = True
+                        print(
+                            f"\n** WARNING: MapSwipe data is {age_hours:.0f}h old "
+                            f"(generated {ms_generated}). Fetch may have failed. **",
+                            file=sys.stderr,
+                        )
+                except ValueError:
+                    pass
+
+            projects.extend(ms_projects)
+            ms_count = len(ms_projects)
+            print(f"\nMerged {ms_count} MapSwipe projects" +
+                  (" (STALE)" if ms_stale else ""))
+        except Exception as e:
+            print(f"\nWarning: could not load MapSwipe data: {e}", file=sys.stderr)
+    else:
+        print("\nNo MapSwipe data found (docs/mapswipe_summary.json), TM only")
+
+    # Sort after merge, using str for sourceId to avoid int/str comparison errors
+    projects.sort(key=lambda p: (p.get("tool", "tm"), str(p.get("sourceId", ""))))
 
     output = {
         "generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -156,7 +199,9 @@ def main():
     with open(OUTPUT, "w") as f:
         json.dump(output, f)
 
-    print(f"\nDone. {len(projects)} projects written to {OUTPUT} ({errors} errors)")
+    tm_count = len(projects) - ms_count
+    print(f"\nDone. {len(projects)} projects written to {OUTPUT}")
+    print(f"  TM: {tm_count}, MapSwipe: {ms_count}, Errors: {errors}")
 
     # Quick stats
     by_imagery = {}

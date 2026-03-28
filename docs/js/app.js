@@ -1,8 +1,62 @@
 /**
- * App module — initialization and wiring.
+ * App module - initialization, wiring, and URL param sync.
  */
 (function () {
   'use strict';
+
+  // Filter keys that map to URL params
+  var PARAM_KEYS = ['tool', 'year', 'imagery', 'country', 'org', 'status'];
+
+  // Map param names to select element IDs
+  var PARAM_TO_SELECT = {
+    tool: 'filter-tool',
+    year: 'filter-year',
+    imagery: 'filter-imagery',
+    country: 'filter-country',
+    org: 'filter-org',
+    status: 'filter-status',
+  };
+
+  /** Read filters from URL search params. */
+  function filtersFromURL() {
+    var params = new URLSearchParams(window.location.search);
+    var filters = {};
+    PARAM_KEYS.forEach(function (key) {
+      var val = params.get(key);
+      if (val) filters[key] = val;
+    });
+    return filters;
+  }
+
+  /** Write current filters to URL search params (replaceState, no reload). */
+  function filtersToURL(filters) {
+    var params = new URLSearchParams();
+    PARAM_KEYS.forEach(function (key) {
+      if (filters[key] && filters[key] !== 'All') {
+        params.set(key, filters[key]);
+      }
+    });
+    var qs = params.toString();
+    var newURL = window.location.pathname + (qs ? '?' + qs : '');
+    history.replaceState(null, '', newURL);
+  }
+
+  /** Apply URL params to filter dropdowns. */
+  function applyURLFilters(urlFilters) {
+    Object.keys(urlFilters).forEach(function (key) {
+      var selectId = PARAM_TO_SELECT[key];
+      if (!selectId) return;
+      var el = document.getElementById(selectId);
+      if (!el) return;
+      // Check if the value exists as an option
+      var val = urlFilters[key];
+      var found = false;
+      for (var i = 0; i < el.options.length; i++) {
+        if (el.options[i].value === val) { found = true; break; }
+      }
+      if (found) el.value = val;
+    });
+  }
 
   function init() {
     var loadingOverlay = document.getElementById('loading-overlay');
@@ -28,11 +82,18 @@
         window.DashboardFilters.init(onFilterChange);
         window.DashboardFilters.populateDropdowns();
 
+        // Apply URL params to dropdowns (if any)
+        var urlFilters = filtersFromURL();
+        if (Object.keys(urlFilters).length > 0) {
+          applyURLFilters(urlFilters);
+        }
+
         // Initialize map
         window.DashboardMap.init();
 
-        // Initial render
-        var projects = window.DashboardData.getFilteredProjects();
+        // Trigger initial filter (reads current dropdown state)
+        var filters = window.DashboardFilters.getCurrentFilters();
+        var projects = window.DashboardData.applyFilters(filters);
         updateDashboard(projects);
 
         // Hide loading overlay
@@ -54,6 +115,7 @@
 
   function onFilterChange(filters) {
     var projects = window.DashboardData.applyFilters(filters);
+    filtersToURL(filters);
     updateDashboard(projects);
   }
 

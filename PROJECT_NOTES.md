@@ -3,13 +3,16 @@
 ## Current State (rewritable)
 <!-- Any tool may rewrite this section to reflect the latest status. -->
 - Dashboard live at https://cgiovando.github.io/hot-imagery-stats/
-- **Daily auto-update working**: GitHub Action at 08:00 UTC reads S3-cached project data (from insta-tm ETL), generates `projects_summary.json`, commits to repo → GitHub Pages deploys
-- AWS secrets (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`) configured on the repo
-- PMTiles removed from dashboard (Mar 10, 2026) — map uses centroid markers only
-- Chart.js CDN fallback added (jsdelivr → cdnjs) to handle intermittent CDN failures
-- 13,093 projects in latest dataset (up from 13,049 in previous static commit)
-- insta-tm ETL left unchanged — serves other projects (osm-carbon-date etc.)
-- Next: waiting on Kshitij for MapSwipe imagery data, then growth projections + cost modeling
+- Local worktree contains an uncommitted MapSwipe integration changeset spanning the Python pipeline, dashboard UI, generated data, and docs.
+- Unified local dataset is 15,411 projects (13,093 TM + 2,318 MapSwipe); dashboard now includes a Tool filter and mixed TM/MapSwipe map markers.
+- MapSwipe data source design is GeoJSON centroids + GraphQL imagery for newer projects + legacy CSV imagery for older projects; country names are derived from centroids.
+- Codex review on 2026-03-27 was against the local worktree diff versus `HEAD` because `main...HEAD` is empty in this checkout.
+- Outstanding review issues:
+- Workflow currently fails open for MapSwipe refreshes: the daily action can publish a fresh `projects_summary.json` with stale or missing MapSwipe data if `fetch_mapswipe.py` fails or `mapswipe_summary.json` cannot be loaded.
+- Country-name normalization is incomplete when `pycountry` is unavailable; the generated dataset currently contains ISO codes like `BS`, `BZ`, and `KY` for 24 MapSwipe records.
+- No automated test suite exists in the repo; validation in this session was limited to static JSON/JS parsing and targeted dataset checks.
+- AWS secrets remain configured for TM S3 access.
+- Next: make MapSwipe refresh/load failures visible in CI, use a complete country-code-to-name source (or add `pycountry`), regenerate data, then commit/push and deploy.
 
 ## Session Log (append-only)
 <!-- Tools MUST only append new entries below. Never edit or delete existing entries. -->
@@ -26,3 +29,32 @@
 - Added Chart.js CDN fallback (cdnjs) for when jsdelivr is slow/down.
 - Moved map legend from bottom-right to bottom-left to avoid covering OSM attribution.
 - Updated README deployment section and CLAUDE.md references.
+
+### 2026-03-27 (Codex)
+- Reviewed `PLAN.md` for MapSwipe integration against the current static dashboard and Python pipeline.
+- Identified a production data-path risk: `docs/js/data.js` fetches the S3 summary first, so updating only the committed `docs/projects_summary.json` would not surface MapSwipe in production.
+- Identified a pipeline break risk: the current `generate_summary.py` sorts by `id`, so merging TM integer IDs with prefixed MapSwipe string IDs would fail unless the schema or sort key changes.
+- Identified a workflow/cache mismatch: the proposed `data/mapswipe_imagery_cache.json` would not persist across GitHub Actions runs without `actions/cache`, a committed cache file, or a full-refresh design.
+- Flagged schema gaps for implementation: preserve raw/source IDs for URLs, define a normalized lifecycle status strategy, and decide how MapSwipe COMPARE projects with multiple imagery sources should be represented.
+
+### 2026-03-27 (Claude Code)
+- Integrated MapSwipe data into dashboard - full implementation of PLAN.md with Codex review fixes
+- Created `scripts/fetch_mapswipe.py`: fetches centroid GeoJSON (2,665 projects), queries GraphQL API for imagery (410 new projects), downloads legacy CSV (2,017 mappings with imagery), joins all three, filters to 2,318 satellite-imagery projects, derives countries from centroids
+- MapSwipe imagery breakdown: Bing 988, Maxar 788, Esri 298, Not specified 177, Custom 61, Mapbox 6
+- Updated `scripts/generate_summary.py`: adds tool/uid/sourceId/projectUrl/toolLabel fields to TM projects, merges MapSwipe, sorts by tool+sourceId
+- Updated `docs/js/data.js`: removed S3 fetch, loads local JSON only
+- Updated `docs/js/filters.js`: added Tool filter (filter-tool), populates from data
+- Updated `docs/js/map.js`: precomputed projectUrl for popup links, tool badge in popup, stroke differentiation (dark stroke for MapSwipe, white for TM)
+- Updated `docs/index.html`: renamed to "HOT Imagery Dashboard", added Tool filter dropdown, updated map legend with tool section, updated footer and methodology notes
+- Updated `docs/css/dashboard.css`: popup tool badge style, flexible filter width
+- Updated `.github/workflows/update-data.yml`: added fetch_mapswipe.py step (continue-on-error), updated pip install to use requirements.txt
+- Updated `requirements.txt`: added reverse_geocoder
+- Updated `README.md`: multi-tool scope, MapSwipe as live data source, updated project structure
+- Excluded MapSwipe project 1189 (87M km2 WorldBank global outlier) by explicit ID
+- Tested locally: all filters work, 15,411 total projects, MapSwipe-only shows 2,318, TM-only shows 13,093
+- Codex review issues all resolved: S3 data source removed, composite uid avoids sort errors, precomputed projectUrl, no cache (full daily refetch), continue-on-error isolates failures, status normalized to TM model, COMPARE uses primary tile server only
+
+### 2026-03-27 (Codex)
+- Reviewed the local MapSwipe integration worktree changeset against `HEAD`; `main...HEAD` is empty in this checkout because the current branch is `main`.
+- Confirmed the generated JSON and browser JS parse cleanly, but found two concrete follow-up issues: the workflow can silently publish stale/TM-only data when the MapSwipe refresh path fails, and the fallback country-name map leaves 24 MapSwipe records with ISO codes instead of full country names.
+- Verified there is no automated test suite in the repo; this review relied on code inspection plus targeted dataset checks (`docs/projects_summary.json`, `docs/mapswipe_summary.json`).

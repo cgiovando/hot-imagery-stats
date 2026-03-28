@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HOT Imagery Stats Dashboard</title>
+  <title>HOT Imagery Dashboard</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -45,8 +45,8 @@
       <div class="flex items-center gap-3">
         <img src="img/hot-logo.svg" alt="HOT logo" width="60" height="36">
         <div>
-          <h1 class="text-lg font-bold text-gray-900 leading-tight">Imagery Stats Dashboard</h1>
-          <p class="text-xs text-gray-500 hidden sm:block">Tasking Manager imagery usage analysis</p>
+          <h1 class="text-lg font-bold text-gray-900 leading-tight">HOT Imagery Dashboard</h1>
+          <p class="text-xs text-gray-500 hidden sm:block">Imagery usage across humanitarian mapping tools</p>
         </div>
       </div>
       <div class="flex items-center gap-4">
@@ -66,6 +66,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
       <div class="flex flex-wrap items-center gap-3">
         <span class="text-sm font-medium text-gray-700 mr-1">Filters:</span>
+
+        <select id="filter-tool" class="filter-select" aria-label="Tool">
+          <option value="All">All tools</option>
+        </select>
 
         <select id="filter-year" class="filter-select" aria-label="Year">
           <option value="All">All years</option>
@@ -131,6 +135,9 @@
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#7b7b7b"></span> Custom</div>
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#a3a3a3"></span> Other</div>
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#d4d4d4"></span> Not specified</div>
+        <div class="map-legend-title" style="margin-top:6px">Tool</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#d73f3f"></span> Tasking Manager</div>
+        <div class="map-legend-item"><span class="map-legend-diamond" style="background:#d73f3f"></span> MapSwipe</div>
       </div>
     </div>
 
@@ -162,9 +169,10 @@
       </div>
     </div>
 
-    <!-- Note about older projects -->
-    <div class="text-xs text-gray-400 text-center py-2">
-      Note: Older projects (pre-2020) may show as "Not specified" for imagery source &mdash; many of these defaulted to Bing.
+    <!-- Methodology notes -->
+    <div class="text-xs text-gray-400 text-center py-2 space-y-1">
+      <p>Older TM projects (pre-2020) may show as "Not specified" for imagery source - many of these defaulted to Bing.</p>
+      <p>MapSwipe countries are derived from project centroids. MapSwipe areas represent geographic coverage; actual tile requests are higher due to multi-user verification.</p>
     </div>
 
   </main>
@@ -172,7 +180,9 @@
   <!-- Footer -->
   <footer class="border-t bg-white mt-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 text-center text-xs text-gray-400">
-      Data source: <a href="https://tasks.hotosm.org" class="text-hot-red hover:underline">HOT Tasking Manager</a>
+      Data sources:
+      <a href="https://tasks.hotosm.org" class="text-hot-red hover:underline">Tasking Manager</a> &middot;
+      <a href="https://mapswipe.org" class="text-hot-red hover:underline">MapSwipe</a>
       &middot; &copy; 2026 <a href="https://www.hotosm.org" class="text-hot-red hover:underline">Humanitarian OpenStreetMap Team</a>
     </div>
   </footer>

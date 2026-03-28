@@ -72,6 +72,13 @@
   flex-shrink: 0;
 }
 
+.map-legend-diamond {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  transform: rotate(45deg);
+}
+
 /* Chart containers */
 .chart-card {
   background: white;
@@ -114,7 +121,8 @@
   font-size: 0.875rem;
   background: white;
   color: #374151;
-  width: 150px;
+  min-width: 130px;
+  max-width: 180px;
   appearance: auto;
 }
 
@@ -153,6 +161,19 @@
 
 .popup-link:hover {
   text-decoration: underline;
+}
+
+.popup-tool-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #f3f4f6;
+  color: #6b7280;
+  vertical-align: middle;
 }
 
 /* Print styles */

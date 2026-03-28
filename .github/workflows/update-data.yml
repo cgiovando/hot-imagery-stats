@@ -26,9 +26,13 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run: pip install boto3 pyproj shapely
+        run: pip install -r requirements.txt
 
-      - name: Generate projects_summary.json from S3
+      - name: Fetch MapSwipe data
+        continue-on-error: true
+        run: python scripts/fetch_mapswipe.py
+
+      - name: Generate unified projects_summary.json
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -38,7 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/projects_summary.json
+          git add docs/projects_summary.json docs/mapswipe_summary.json
           git diff --staged --quiet && echo "No changes" && exit 0
           git commit -m "Update dashboard data ($(date -u +%Y-%m-%d))"
           git push
