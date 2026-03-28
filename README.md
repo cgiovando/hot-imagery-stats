@@ -10,11 +10,13 @@ Humanitarian mapping efforts rely on satellite imagery from multiple providers i
 
 ### What It Shows
 
-- **Project counts and area** by imagery source
-- **Geographic distribution** of mapping projects worldwide
-- **Trends over time** - how imagery usage has evolved
+- **Project counts and area** by imagery source (Bing, Esri, Mapbox, Maxar, etc.)
+- **Geographic distribution** of mapping projects worldwide (circles for TM, diamonds for MapSwipe)
+- **Trends over time** - how imagery usage has evolved since 2012
 - **Country-level breakdown** of mapping activity
-- **Interactive filters** for tool, year, imagery source, country, organization, and status
+- **Cascading filters** - selecting one filter narrows options in all others (tool, year, imagery, country, organization, status)
+- **Shareable URLs** - filter state and map position are synced to the URL for easy sharing
+- **Auto-zoom** - map fits to the extent of filtered data
 
 ## Data Sources
 
