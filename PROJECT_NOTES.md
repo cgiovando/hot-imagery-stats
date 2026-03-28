@@ -3,16 +3,16 @@
 ## Current State (rewritable)
 <!-- Any tool may rewrite this section to reflect the latest status. -->
 - Dashboard live at https://cgiovando.github.io/hot-imagery-stats/
-- Local worktree contains an uncommitted MapSwipe integration changeset spanning the Python pipeline, dashboard UI, generated data, and docs.
-- Unified local dataset is 15,411 projects (13,093 TM + 2,318 MapSwipe); dashboard now includes a Tool filter and mixed TM/MapSwipe map markers.
-- MapSwipe data source design is GeoJSON centroids + GraphQL imagery for newer projects + legacy CSV imagery for older projects; country names are derived from centroids.
-- Codex review on 2026-03-27 was against the local worktree diff versus `HEAD` because `main...HEAD` is empty in this checkout.
-- Outstanding review issues:
-- Workflow currently fails open for MapSwipe refreshes: the daily action can publish a fresh `projects_summary.json` with stale or missing MapSwipe data if `fetch_mapswipe.py` fails or `mapswipe_summary.json` cannot be loaded.
-- Country-name normalization is incomplete when `pycountry` is unavailable; the generated dataset currently contains ISO codes like `BS`, `BZ`, and `KY` for 24 MapSwipe records.
-- No automated test suite exists in the repo; validation in this session was limited to static JSON/JS parsing and targeted dataset checks.
-- AWS secrets remain configured for TM S3 access.
-- Next: make MapSwipe refresh/load failures visible in CI, use a complete country-code-to-name source (or add `pycountry`), regenerate data, then commit/push and deploy.
+- **Renamed "HOT Imagery Dashboard"** - covers TM + MapSwipe, branded for humanitarian mapping tools
+- Unified dataset: ~15,478 projects (13,157 TM + 2,321 MapSwipe), auto-updating daily
+- **Incremental TM updates**: generate_summary.py uses committed JSON as baseline, fetches only modified/new projects (~85 in 5s vs 13K in 10min). schemaVersion=2 triggers full rebuild on schema changes. --full flag available.
+- **MapSwipe integration**: fetch_mapswipe.py pulls from public GeoJSON + GraphQL API + legacy CSV, derives countries via pycountry + reverse_geocoder
+- **Dashboard features**: cascading filters (Tool, Year, Imagery, Country, Org, Status), diamond markers for MapSwipe, auto-zoom to filtered extent, shareable URLs (filter params + map hash)
+- **Security**: XSS protection in map popups (escapeHtml + URL validation)
+- **CI**: Daily at 08:00 UTC, MapSwipe fetch (continue-on-error) then incremental TM + merge, ~1 min total
+- AWS secrets configured for TM S3 access
+- All Codex review issues resolved: pycountry for complete country names, staleness warnings, safe sort, temp file writes
+- Next: fAIr integration, growth projections + cost modeling
 
 ## Session Log (append-only)
 <!-- Tools MUST only append new entries below. Never edit or delete existing entries. -->
@@ -58,3 +58,13 @@
 - Reviewed the local MapSwipe integration worktree changeset against `HEAD`; `main...HEAD` is empty in this checkout because the current branch is `main`.
 - Confirmed the generated JSON and browser JS parse cleanly, but found two concrete follow-up issues: the workflow can silently publish stale/TM-only data when the MapSwipe refresh path fails, and the fallback country-name map leaves 24 MapSwipe records with ISO codes instead of full country names.
 - Verified there is no automated test suite in the repo; this review relied on code inspection plus targeted dataset checks (`docs/projects_summary.json`, `docs/mapswipe_summary.json`).
+
+### 2026-03-28 (Claude Code)
+- Fixed Codex convergence review issues: XSS protection in map popups, sort after merge with str() cast, pycountry for complete country names, GraphQL error logging, staleness warning for MapSwipe data >48h old
+- Changed MapSwipe markers from SDF squares to canvas-drawn diamond images (one per imagery color, with white border)
+- Added cascading filters: selecting one filter narrows options in all other dropdowns
+- Added auto-zoom: map fits to filtered data extent, default global view on reset
+- Added shareable URLs: filter params (?tool=mapswipe&country=Uganda) + map hash (#map=z/lat/lng)
+- Updated branding: "humanitarian mapping tools" (not HOT-specific), removed HOT attribution from footer
+- Implemented incremental TM updates in generate_summary.py: loads committed JSON as baseline, fetches only new/modified projects from S3. Reduced CI from ~11 min to ~1 min. Uses schemaVersion for auto-rebuild, watermark with 24h overlap, deletion detection, --full flag, temp file writes.
+- Confirmed incremental mode works in CI: 85 projects fetched in 4.8s, 15,478 total (13,157 TM + 2,321 MapSwipe)
