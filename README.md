@@ -1,6 +1,6 @@
 # HOT Imagery Dashboard
 
-An interactive dashboard visualizing satellite imagery usage across humanitarian mapping tools, maintained by the [Humanitarian OpenStreetMap Team (HOT)](https://www.hotosm.org).
+An interactive dashboard visualizing satellite imagery usage across humanitarian mapping tools.
 
 **Live Dashboard:** [https://cgiovando.github.io/hot-imagery-stats/](https://cgiovando.github.io/hot-imagery-stats/)
 
@@ -115,7 +115,6 @@ BSD-2-Clause
 
 ## Acknowledgments
 
-- [Humanitarian OpenStreetMap Team (HOT)](https://www.hotosm.org/) - Data source and project context
 - [MapSwipe](https://mapswipe.org/) - Volunteer mapping data
 - [MapLibre](https://maplibre.org/) - Open-source map rendering
 - [OpenStreetMap](https://www.openstreetmap.org/) - Basemap data
