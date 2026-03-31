@@ -3,16 +3,16 @@
 ## Current State (rewritable)
 <!-- Any tool may rewrite this section to reflect the latest status. -->
 - Dashboard live at https://cgiovando.github.io/hot-imagery-stats/
-- **Renamed "HOT Imagery Dashboard"** - covers TM + MapSwipe, branded for humanitarian mapping tools
-- Unified dataset: ~15,478 projects (13,157 TM + 2,321 MapSwipe), auto-updating daily
-- **Incremental TM updates**: generate_summary.py uses committed JSON as baseline, fetches only modified/new projects (~85 in 5s vs 13K in 10min). schemaVersion=2 triggers full rebuild on schema changes. --full flag available.
-- **MapSwipe integration**: fetch_mapswipe.py pulls from public GeoJSON + GraphQL API + legacy CSV, derives countries via pycountry + reverse_geocoder
-- **Dashboard features**: cascading filters (Tool, Year, Imagery, Country, Org, Status), diamond markers for MapSwipe, auto-zoom to filtered extent, shareable URLs (filter params + map hash)
-- **Security**: XSS protection in map popups (escapeHtml + URL validation)
-- **CI**: Daily at 08:00 UTC, MapSwipe fetch (continue-on-error) then incremental TM + merge, ~1 min total
-- AWS secrets configured for TM S3 access
-- All Codex review issues resolved: pycountry for complete country names, staleness warnings, safe sort, temp file writes
-- Next: fAIr integration, growth projections + cost modeling
+- **Three tools integrated**: Tasking Manager (13,159) + MapSwipe (2,321) + fAIr (273) = 15,753 total projects
+- **fAIr integration** (2026-03-30): fetch_fair.py fetches datasets, AOI polygons (area), and OAM catalog (platform classification)
+- **OAM imagery classification**: drone (400), satellite (134), aircraft (32), unknown (47) - covers both TM and fAIr OAM URLs
+- **OAM platform cache**: docs/oam_platform_cache.json (20K entries), refreshed daily from cgiovando/oam-api catalog
+- **Schema version 4**: full rebuild triggered, all TM OAM URLs reclassified from "Custom" to OAM subcategories
+- **Incremental TM updates**: committed JSON baseline, overlap watermark, ~1 min CI runs (full rebuild only on schema change)
+- **Dashboard features**: cascading filters, shareable URLs, auto-zoom, circle/diamond/triangle markers by tool, OAM imagery categories in charts/legend, atomic JSON writes
+- **CI**: Daily at 08:00 UTC - fetch MapSwipe, fetch fAIr (with OAM catalog refresh), incremental TM + merge, ~2 min total
+- **All Codex/Claude review issues resolved**: atomic writes, esc(0) popup fix, color sync, OAM Unknown legend entry
+- Next: growth projections + cost modeling (in ../microsoft-imagery/)
 
 ## Session Log (append-only)
 <!-- Tools MUST only append new entries below. Never edit or delete existing entries. -->
@@ -68,3 +68,18 @@
 - Updated branding: "humanitarian mapping tools" (not HOT-specific), removed HOT attribution from footer
 - Implemented incremental TM updates in generate_summary.py: loads committed JSON as baseline, fetches only new/modified projects from S3. Reduced CI from ~11 min to ~1 min. Uses schemaVersion for auto-rebuild, watermark with 24h overlap, deletion detection, --full flag, temp file writes.
 - Confirmed incremental mode works in CI: 85 projects fetched in 4.8s, 15,478 total (13,157 TM + 2,321 MapSwipe)
+
+### 2026-03-30 (Codex)
+- Reviewed fAIr integration changeset. Found esc(0) popup bug, non-atomic writes risk, status hardcoding concern.
+- All findings resolved in same session before commit.
+
+### 2026-03-30 (Claude Code)
+- Integrated fAIr as third data source: 273 datasets, triangle markers, OAM imagery classification
+- Created scripts/fetch_fair.py: paginated dataset API, centroid GeoJSON, AOI polygons for area (129 km2 total), OAM catalog for platform type
+- OAM imagery breakdown: OAM Drone (400), OAM Satellite (134), OAM Aircraft (32), OAM Unknown (47) - across both TM and fAIr
+- OAM platform cache (docs/oam_platform_cache.json): 20K entries from cgiovando/oam-api, refreshed daily (37MB catalog download, ~15s)
+- Updated generate_summary.py: OAM classification for TM projects via shared cache, schema v4
+- Updated dashboard: triangle markers for fAIr, 4 new OAM imagery categories with distinct colors, darkened neutral marker colors for visibility
+- Resolved all Claude + Codex review findings: color mismatch in IMAGERY_COLORS dict, fallback color, OAM Unknown legend entry, esc(0) popup bug, atomic writes
+- CI workflow: fetch_fair.py step with continue-on-error, oam_platform_cache.json in git add
+- Note: projects_summary.json on remote won't include fAIr until next CI run picks up new scripts
