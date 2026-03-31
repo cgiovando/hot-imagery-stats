@@ -392,7 +392,7 @@ def main():
             "mappingTypes": [],
             "areaSqKm": areas.get(did),
             "centroid": centroid,
-            "projectUrl": "https://fair.hotosm.org/",
+            "projectUrl": f"https://fair.hotosm.org/datasets/{did}",
             "projectType": None,
             "contributors": None,
             "results": ds.get("models_count"),
