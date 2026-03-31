@@ -32,6 +32,10 @@ jobs:
         continue-on-error: true
         run: python scripts/fetch_mapswipe.py
 
+      - name: Fetch fAIr data
+        continue-on-error: true
+        run: python scripts/fetch_fair.py
+
       - name: Generate unified projects_summary.json
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -42,7 +46,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/projects_summary.json docs/mapswipe_summary.json
+          git add docs/projects_summary.json docs/mapswipe_summary.json docs/fair_summary.json docs/oam_platform_cache.json
           git diff --staged --quiet && echo "No changes" && exit 0
           git commit -m "Update dashboard data ($(date -u +%Y-%m-%d))"
           git push

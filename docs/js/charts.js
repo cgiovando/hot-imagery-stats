@@ -9,9 +9,13 @@ window.DashboardCharts = (function () {
     Esri: '#2b83ba',
     Mapbox: '#4264fb',
     Maxar: '#ff8c00',
-    Custom: '#7b7b7b',
-    Other: '#a3a3a3',
-    'Not specified': '#d4d4d4',
+    'OAM Drone': '#10b981',
+    'OAM Satellite': '#8b5cf6',
+    'OAM Aircraft': '#f59e0b',
+    'OAM Unknown': '#64748b',
+    Custom: '#57534e',
+    Other: '#78716c',
+    'Not specified': '#a8a29e',
   };
 
   var IMAGERY_ORDER = [
@@ -19,6 +23,10 @@ window.DashboardCharts = (function () {
     'Esri',
     'Mapbox',
     'Maxar',
+    'OAM Drone',
+    'OAM Satellite',
+    'OAM Aircraft',
+    'OAM Unknown',
     'Custom',
     'Other',
     'Not specified',

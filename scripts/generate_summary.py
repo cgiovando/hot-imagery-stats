@@ -36,7 +36,7 @@ OUTPUT = Path(__file__).resolve().parent.parent / "docs" / "projects_summary.jso
 GEOD = Geod(ellps="WGS84")
 
 # Bump this when build_summary() output schema changes to force a full rebuild
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 4
 
 # How far back to look beyond the baseline timestamp to catch stragglers
 OVERLAP_BUFFER_HOURS = 24
@@ -46,20 +46,44 @@ IMAGERY_PATTERNS = [
     (re.compile(r"esri|world\.imagery|arcgis", re.IGNORECASE), "Esri"),
     (re.compile(r"mapbox", re.IGNORECASE), "Mapbox"),
     (re.compile(r"maxar|digitalglobe|vivid|securewatch", re.IGNORECASE), "Maxar"),
-    (re.compile(r"openaerialmap|oam|open\.aerial", re.IGNORECASE), "Custom"),
-    (re.compile(r"custom", re.IGNORECASE), "Custom"),
 ]
+
+OAM_RE = re.compile(r"openaerialmap|oam|open\.aerial", re.IGNORECASE)
+OAM_PATH_RE = re.compile(r"tiles\.openaerialmap\.org/([^/]+/\d+/[^/]+)")
+
+OAM_PLATFORM_MAP = {
+    "uav": "OAM Drone",
+    "satellite": "OAM Satellite",
+    "aircraft": "OAM Aircraft",
+}
+
+# Loaded once in main(), shared via module-level variable
+_oam_cache = {}
 
 
 def normalize_imagery(raw):
     if not raw or raw.strip() == "":
         return "Not specified"
     raw_stripped = raw.strip()
+
+    # OAM URLs: classify by platform via the cached OAM catalog
+    if OAM_RE.search(raw_stripped):
+        m = OAM_PATH_RE.search(raw_stripped)
+        if m and m.group(1) in _oam_cache:
+            platform = _oam_cache[m.group(1)].get("platform", "")
+            return OAM_PLATFORM_MAP.get(platform.lower(), "OAM Unknown")
+        return "OAM Unknown"
+
+    # Known basemap providers
     for pattern, category in IMAGERY_PATTERNS:
         if pattern.search(raw_stripped):
             return category
+
+    # Other custom TMS URLs
+    if re.search(r"custom", raw_stripped, re.IGNORECASE):
+        return "Custom"
     if raw_stripped.startswith(("http://", "https://", "tms[")):
-        return "Other"
+        return "Custom"
     return "Other"
 
 
@@ -163,7 +187,18 @@ def load_baseline():
 
 
 def main():
+    global _oam_cache
     full_rebuild = "--full" in sys.argv
+
+    # Load OAM platform cache for imagery classification
+    oam_cache_file = OUTPUT.parent / "oam_platform_cache.json"
+    if oam_cache_file.exists():
+        try:
+            with open(oam_cache_file) as f:
+                _oam_cache = json.load(f)
+            print(f"Loaded OAM platform cache: {len(_oam_cache)} entries")
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"Warning: OAM cache unreadable: {e}", file=sys.stderr)
 
     thread_local = threading.local()
 
@@ -310,6 +345,41 @@ def main():
     else:
         print("No MapSwipe data found (docs/mapswipe_summary.json), TM only")
 
+    # Merge fAIr data if available
+    fair_file = OUTPUT.parent / "fair_summary.json"
+    fair_count = 0
+    fair_stale = False
+    if fair_file.exists():
+        try:
+            with open(fair_file) as f:
+                fair_data = json.load(f)
+            fair_projects = fair_data.get("projects", [])
+
+            # Check staleness
+            fair_generated = fair_data.get("generated", "")
+            if fair_generated:
+                try:
+                    fair_ts = datetime.fromisoformat(fair_generated.replace("Z", "+00:00"))
+                    age_hours = (datetime.now(timezone.utc) - fair_ts).total_seconds() / 3600
+                    if age_hours > 48:
+                        fair_stale = True
+                        print(
+                            f"\n** WARNING: fAIr data is {age_hours:.0f}h old "
+                            f"(generated {fair_generated}). Fetch may have failed. **",
+                            file=sys.stderr,
+                        )
+                except ValueError:
+                    pass
+
+            projects.extend(fair_projects)
+            fair_count = len(fair_projects)
+            print(f"fAIr: {fair_count} datasets" +
+                  (" (STALE)" if fair_stale else ""))
+        except Exception as e:
+            print(f"\nWarning: could not load fAIr data: {e}", file=sys.stderr)
+    else:
+        print("No fAIr data found (docs/fair_summary.json), skipping")
+
     # Sort after merge
     projects.sort(key=lambda p: (p.get("tool", "tm"), str(p.get("sourceId", ""))))
 
@@ -333,7 +403,7 @@ def main():
         raise
 
     print(f"\nDone. {len(projects)} projects written to {OUTPUT}")
-    print(f"  TM: {tm_count}, MapSwipe: {ms_count}, Errors: {errors}")
+    print(f"  TM: {tm_count}, MapSwipe: {ms_count}, fAIr: {fair_count}, Errors: {errors}")
 
     # Quick stats
     by_imagery = {}

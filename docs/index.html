@@ -132,12 +132,17 @@
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#2b83ba"></span> Esri</div>
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#4264fb"></span> Mapbox</div>
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#ff8c00"></span> Maxar</div>
-        <div class="map-legend-item"><span class="map-legend-dot" style="background:#7b7b7b"></span> Custom</div>
-        <div class="map-legend-item"><span class="map-legend-dot" style="background:#a3a3a3"></span> Other</div>
-        <div class="map-legend-item"><span class="map-legend-dot" style="background:#d4d4d4"></span> Not specified</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#10b981"></span> OAM Drone</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#8b5cf6"></span> OAM Satellite</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#f59e0b"></span> OAM Aircraft</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#64748b"></span> OAM Unknown</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#57534e"></span> Custom</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#78716c"></span> Other</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#a8a29e"></span> Not specified</div>
         <div class="map-legend-title" style="margin-top:6px">Tool</div>
         <div class="map-legend-item"><span class="map-legend-dot" style="background:#d73f3f"></span> Tasking Manager</div>
         <div class="map-legend-item"><span class="map-legend-diamond" style="background:#d73f3f"></span> MapSwipe</div>
+        <div class="map-legend-item"><span class="map-legend-triangle" style="border-bottom-color:#d73f3f"></span> fAIr</div>
       </div>
     </div>
 
@@ -173,6 +178,7 @@
     <div class="text-xs text-gray-400 text-center py-2 space-y-1">
       <p>Older TM projects (pre-2020) may show as "Not specified" for imagery source - many of these defaulted to Bing.</p>
       <p>MapSwipe countries are derived from project centroids. MapSwipe areas represent geographic coverage; actual tile requests are higher due to multi-user verification.</p>
+      <p>fAIr datasets represent AI training areas. ~90% use OpenAerialMap imagery, classified by platform type (Drone, Satellite, Aircraft) via the <a href="https://github.com/cgiovando/oam-api" class="text-hot-red hover:underline">OAM catalog</a>. fAIr does not currently use Bing/Microsoft imagery.</p>
     </div>
 
   </main>
@@ -182,7 +188,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 text-center text-xs text-gray-400">
       Data sources:
       <a href="https://tasks.hotosm.org" class="text-hot-red hover:underline">Tasking Manager</a> &middot;
-      <a href="https://mapswipe.org" class="text-hot-red hover:underline">MapSwipe</a>
+      <a href="https://mapswipe.org" class="text-hot-red hover:underline">MapSwipe</a> &middot;
+      <a href="https://fair.hotosm.org" class="text-hot-red hover:underline">fAIr</a>
       &middot; &copy; 2026 Cristiano Giovando
     </div>
   </footer>

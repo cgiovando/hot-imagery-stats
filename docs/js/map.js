@@ -30,10 +30,14 @@ window.DashboardMap = (function () {
     'Esri', '#2b83ba',
     'Mapbox', '#4264fb',
     'Maxar', '#ff8c00',
-    'Custom', '#7b7b7b',
-    'Other', '#a3a3a3',
-    'Not specified', '#d4d4d4',
-    '#d4d4d4',
+    'OAM Drone', '#10b981',
+    'OAM Satellite', '#8b5cf6',
+    'OAM Aircraft', '#f59e0b',
+    'OAM Unknown', '#64748b',
+    'Custom', '#57534e',
+    'Other', '#78716c',
+    'Not specified', '#a8a29e',
+    '#a8a29e',
   ];
 
   var IMAGERY_COLORS = {
@@ -41,9 +45,13 @@ window.DashboardMap = (function () {
     'Esri': '#2b83ba',
     'Mapbox': '#4264fb',
     'Maxar': '#ff8c00',
-    'Custom': '#7b7b7b',
-    'Other': '#a3a3a3',
-    'Not specified': '#d4d4d4',
+    'OAM Drone': '#10b981',
+    'OAM Satellite': '#8b5cf6',
+    'OAM Aircraft': '#f59e0b',
+    'OAM Unknown': '#64748b',
+    'Custom': '#57534e',
+    'Other': '#78716c',
+    'Not specified': '#a8a29e',
   };
 
   /**
@@ -89,6 +97,49 @@ window.DashboardMap = (function () {
     });
   }
 
+  /**
+   * Draw an upward-pointing triangle on a canvas with fill color and white border.
+   * Returns the canvas ImageData for use with map.addImage().
+   */
+  function createTriangleImage(size, fillColor) {
+    var canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    var ctx = canvas.getContext('2d');
+    var cx = size / 2;
+    var pad = size * 0.08;
+    var top = pad;
+    var bottom = size - pad;
+    var hw = size * 0.44; // horizontal half-width
+
+    ctx.beginPath();
+    ctx.moveTo(cx, top);              // top center
+    ctx.lineTo(cx + hw, bottom);      // bottom right
+    ctx.lineTo(cx - hw, bottom);      // bottom left
+    ctx.closePath();
+
+    // White border
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = size * 0.1;
+    ctx.lineJoin = 'miter';
+    ctx.stroke();
+
+    // Fill
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+
+    return ctx.getImageData(0, 0, size, size);
+  }
+
+  /** Register all triangle images for each imagery color. */
+  function addTriangleImages(map) {
+    var imgSize = 20;
+    Object.keys(IMAGERY_COLORS).forEach(function (name) {
+      var img = createTriangleImage(imgSize, IMAGERY_COLORS[name]);
+      map.addImage('triangle-' + name, img);
+    });
+  }
+
   function init() {
     map = new maplibregl.Map({
       container: 'map',
@@ -124,6 +175,9 @@ window.DashboardMap = (function () {
     map.on('load', function () {
       // Diamond icons for MapSwipe (one per imagery color)
       addDiamondImages(map);
+
+      // Triangle icons for fAIr (one per imagery color)
+      addTriangleImages(map);
 
       // Shared GeoJSON source
       map.addSource('project-centroids', {
@@ -164,6 +218,10 @@ window.DashboardMap = (function () {
             'Esri', 'diamond-Esri',
             'Mapbox', 'diamond-Mapbox',
             'Maxar', 'diamond-Maxar',
+            'OAM Drone', 'diamond-OAM Drone',
+            'OAM Satellite', 'diamond-OAM Satellite',
+            'OAM Aircraft', 'diamond-OAM Aircraft',
+            'OAM Unknown', 'diamond-OAM Unknown',
             'Custom', 'diamond-Custom',
             'Other', 'diamond-Other',
             'diamond-Not specified',
@@ -181,8 +239,43 @@ window.DashboardMap = (function () {
         },
       });
 
-      // Popup on click (both layers)
-      var clickLayers = ['tm-points', 'ms-points'];
+      // Layer 3: fAIr datasets - colored triangle icons
+      map.addLayer({
+        id: 'fair-points',
+        type: 'symbol',
+        source: 'project-centroids',
+        filter: ['==', ['get', 'tool'], 'fair'],
+        layout: {
+          'icon-image': [
+            'match',
+            ['get', 'imagery'],
+            'Bing', 'triangle-Bing',
+            'Esri', 'triangle-Esri',
+            'Mapbox', 'triangle-Mapbox',
+            'Maxar', 'triangle-Maxar',
+            'OAM Drone', 'triangle-OAM Drone',
+            'OAM Satellite', 'triangle-OAM Satellite',
+            'OAM Aircraft', 'triangle-OAM Aircraft',
+            'OAM Unknown', 'triangle-OAM Unknown',
+            'Custom', 'triangle-Custom',
+            'Other', 'triangle-Other',
+            'triangle-Not specified',
+          ],
+          'icon-size': [
+            'interpolate', ['linear'], ['zoom'],
+            2, 0.45,
+            8, 0.8,
+          ],
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': true,
+        },
+        paint: {
+          'icon-opacity': 0.85,
+        },
+      });
+
+      // Popup on click (all tool layers)
+      var clickLayers = ['tm-points', 'ms-points', 'fair-points'];
       clickLayers.forEach(function (layerId) {
         map.on('click', layerId, function (e) {
           if (!e.features || !e.features.length) return;
@@ -220,6 +313,8 @@ window.DashboardMap = (function () {
     if (props.tool === 'mapswipe') {
       html += '<br><strong>Contributors:</strong> ' + esc(props.contributors || 'N/A') +
         ' | <strong>Results:</strong> ' + esc(props.results || 'N/A');
+    } else if (props.tool === 'fair') {
+      html += '<br><strong>Models:</strong> ' + (props.results != null ? esc(String(props.results)) : 'N/A');
     } else {
       html += '<br><strong>Mapped:</strong> ' + (props.pctMapped != null ? esc(props.pctMapped) + '%' : 'N/A') +
         ' | <strong>Validated:</strong> ' + (props.pctValidated != null ? esc(props.pctValidated) + '%' : 'N/A');
@@ -229,7 +324,9 @@ window.DashboardMap = (function () {
 
     var url = safeUrl(props.projectUrl);
     if (url) {
-      var linkLabel = props.tool === 'mapswipe' ? 'View on MapSwipe' : 'View on Tasking Manager';
+      var linkLabel = props.tool === 'mapswipe' ? 'View on MapSwipe'
+        : props.tool === 'fair' ? 'View on fAIr'
+        : 'View on Tasking Manager';
       html += '<a class="popup-link" href="' + esc(url) +
         '" target="_blank" rel="noopener">' + linkLabel + ' &rarr;</a>';
     }
