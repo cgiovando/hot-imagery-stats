@@ -22,7 +22,7 @@ Humanitarian mapping efforts rely on satellite imagery from multiple providers i
 
 ### Tasking Manager (live)
 
-Project data is sourced from the [HOT Tasking Manager API](https://tasking-manager-tm4-production-api.hotosm.org/api/v2/) via [insta-tm](https://github.com/cgiovando/insta-tm), a daily ETL pipeline that mirrors project metadata to S3.
+Project data is sourced from the [HOT Tasking Manager API](https://tasking-manager-tm4-production-api.hotosm.org/api/v2/) via [insta-tm](https://github.com/cgiovando/insta-tm), a daily ETL pipeline that mirrors project metadata to Cloudflare R2.
 
 ### MapSwipe (live)
 
@@ -91,7 +91,7 @@ docs/                        # GitHub Pages root
 └── mapswipe_summary.json    # MapSwipe data (intermediate)
 scripts/
 ├── fetch_mapswipe.py        # Fetch MapSwipe data from API + legacy CSV
-├── generate_summary.py      # Generate unified summary from S3 + MapSwipe
+├── generate_summary.py      # Generate unified summary from R2 + MapSwipe
 └── fetch_sample.py          # Fetch sample TM data for testing
 ```
 
