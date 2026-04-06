@@ -16,6 +16,7 @@ Usage:
 """
 
 import json
+import os
 import re
 import sys
 import tempfile
@@ -31,6 +32,10 @@ from shapely.geometry import shape
 
 BUCKET = "insta-tm"
 PREFIX = "api/v2/projects/"
+R2_ENDPOINT = os.environ.get(
+    "S3_ENDPOINT_URL",
+    "https://407aab4823a0af82df007b483f845f8f.r2.cloudflarestorage.com",
+)
 OUTPUT = Path(__file__).resolve().parent.parent / "docs" / "projects_summary.json"
 
 GEOD = Geod(ellps="WGS84")
@@ -204,10 +209,12 @@ def main():
 
     def get_s3():
         if not hasattr(thread_local, "s3"):
-            thread_local.s3 = boto3.client("s3", region_name="us-east-1")
+            thread_local.s3 = boto3.client(
+                "s3", region_name="auto", endpoint_url=R2_ENDPOINT
+            )
         return thread_local.s3
 
-    s3 = boto3.client("s3", region_name="us-east-1")
+    s3 = boto3.client("s3", region_name="auto", endpoint_url=R2_ENDPOINT)
 
     # List all S3 keys with their LastModified timestamps
     print("Listing project files on S3...", flush=True)
