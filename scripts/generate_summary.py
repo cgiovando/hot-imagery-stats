@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generate docs/projects_summary.json from S3-cached project data.
+"""Generate docs/projects_summary.json from R2-cached project data.
 
-Reads individual project JSONs from s3://insta-tm/api/v2/projects/
-(populated daily by the insta-tm ETL), extracts summary fields, and
-writes the dashboard data file.
+Reads individual project JSONs from the insta-tm R2 bucket (api/v2/projects/),
+populated daily by the insta-tm ETL, extracts summary fields, and writes
+the dashboard data file.
 
 Incremental mode (default): loads the previously committed summary as
 a baseline, then fetches only projects that are new or modified since
@@ -142,7 +142,7 @@ def build_summary(details):
 
 
 def extract_project_id(key):
-    """Extract numeric project ID from an S3 key like 'api/v2/projects/12345.json'."""
+    """Extract numeric project ID from an R2 key like 'api/v2/projects/12345.json'."""
     name = key.rsplit("/", 1)[-1]
     return name.replace(".json", "")
 
@@ -216,8 +216,8 @@ def main():
 
     s3 = boto3.client("s3", region_name="auto", endpoint_url=R2_ENDPOINT)
 
-    # List all S3 keys with their LastModified timestamps
-    print("Listing project files on S3...", flush=True)
+    # List all R2 keys with their LastModified timestamps
+    print("Listing project files on R2...", flush=True)
     s3_objects = {}  # key -> LastModified
     paginator = s3.get_paginator("list_objects_v2")
     for page in paginator.paginate(Bucket=BUCKET, Prefix=PREFIX):
@@ -225,7 +225,7 @@ def main():
             s3_objects[obj["Key"]] = obj["LastModified"]
 
     s3_ids = {extract_project_id(k) for k in s3_objects}
-    print(f"Found {len(s3_objects)} project files on S3", flush=True)
+    print(f"Found {len(s3_objects)} project files on R2", flush=True)
 
     # Decide: incremental or full
     baseline, baseline_ts, baseline_valid = {}, None, False
@@ -259,7 +259,7 @@ def main():
         # Detect deletions
         deleted_ids = baseline_ids - s3_ids
         if deleted_ids:
-            print(f"  {len(deleted_ids)} projects deleted from S3, removing from baseline")
+            print(f"  {len(deleted_ids)} projects deleted from R2, removing from baseline")
             for did in deleted_ids:
                 baseline.pop(did, None)
 
