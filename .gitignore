@@ -26,5 +26,7 @@ Thumbs.db
 
 # Project docs (local only, may contain sensitive context)
 CLAUDE.md
+AGENTS.md
+PROJECT_NOTES.md
 
 .timesheet-log.md
