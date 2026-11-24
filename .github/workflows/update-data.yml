@@ -1,0 +1,83 @@
+name: Update and Deploy Dashboard
+
+# Data files are built here and published straight to GitHub Pages; they are
+# never committed. Each run starts from the previously published files (the
+# incremental TM baseline, MapSwipe imagery fallback and OAM cache).
+
+on:
+  schedule:
+    # Daily at 08:00 UTC (2 hours after the insta-tm ETL at 06:00 UTC)
+    - cron: "0 8 * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  SITE_URL: https://cgiovando.github.io/hot-imagery-stats
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore previously published data
+        run: |
+          for f in projects_summary.json mapswipe_summary.json fair_summary.json oam_platform_cache.json; do
+            curl -fsSL --retry 3 -o "docs/$f" "$SITE_URL/$f" \
+              && echo "Restored $f" \
+              || { echo "::warning::Could not restore $f (starting fresh)"; rm -f "docs/$f"; }
+          done
+
+      - name: Fetch MapSwipe data
+        continue-on-error: true
+        run: python scripts/fetch_mapswipe.py
+
+      - name: Fetch fAIr data
+        continue-on-error: true
+        run: python scripts/fetch_fair.py
+
+      - name: Generate unified projects_summary.json
+        env:
+          S3_ENDPOINT_URL: ${{ secrets.S3_ENDPOINT_URL }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: python scripts/generate_summary.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+
+      # Runs after the deploy so working sources still publish; fails the run
+      # (and sends GitHub's failure email) when a source has been down >48h.
+      - name: Check data freshness
+        run: python scripts/check_freshness.py

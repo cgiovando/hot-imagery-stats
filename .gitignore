@@ -1,0 +1,39 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+
+# Data (may be large or contain API responses)
+data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Project docs (local only, may contain sensitive context)
+CLAUDE.md
+AGENTS.md
+PROJECT_NOTES.md
+
+.timesheet-log.md
+PLAN.md
+
+# Generated data: built by CI and published to GitHub Pages, never committed
+docs/projects_summary.json
+docs/mapswipe_summary.json
+docs/fair_summary.json
+docs/oam_platform_cache.json
