@@ -34,6 +34,7 @@ import requests
 from pyproj import Geod
 from shapely.geometry import shape
 
+from drivers import DRIVERS, classify_project, match_text
 from common import (
     MAX_AREA_SQKM,
     atomic_json_write,
@@ -46,6 +47,10 @@ BUCKET = "insta-tm"
 PREFIX = "api/v2/projects/"
 DOCS = Path(__file__).resolve().parent.parent / "docs"
 OUTPUT = DOCS / "projects_summary.json"
+TM_PROJECT_URL = (
+    "https://tasking-manager-tm4-production-api.hotosm.org/api/v2/projects/{}/"
+    "?as_file=false&abbreviated=true"
+)
 TM_STATS_URL = (
     "https://tasking-manager-tm4-production-api.hotosm.org/api/v2/projects/{}/statistics/"
 )
@@ -53,7 +58,7 @@ TM_STATS_URL = (
 GEOD = Geod(ellps="WGS84")
 
 # Bump this when the output schema changes to force a full rebuild
-SCHEMA_VERSION = 5
+SCHEMA_VERSION = 6
 
 # How far back to look beyond the baseline timestamp to catch stragglers
 OVERLAP_BUFFER_HOURS = 24
@@ -171,6 +176,12 @@ def build_summary(details):
         "pctValidated": details.get("percentValidated"),
         "difficulty": details.get("difficulty"),
         "priority": details.get("projectPriority"),
+        # Drivers found in the short description (the description itself is
+        # not stored). Campaigns/interests are not in the R2 mirror and are
+        # filled from the TM API by fetch_tm_meta().
+        "descDrivers": sorted(match_text(project_info.get("shortDescription"))),
+        "campaigns": None,
+        "interests": None,
     }
 
 
@@ -208,6 +219,40 @@ def fetch_tm_activity(projects):
             p["timeSpentSec"] = round(float(seconds or 0))
     if failures:
         print(f"  {failures} activity lookups failed (left unknown, not excluded)", file=sys.stderr)
+    return failures
+
+
+def fetch_tm_meta(projects):
+    """Fill campaigns/interests (name lists) from the TM project endpoint."""
+    if not projects:
+        return 0
+    session = requests.Session()
+    failures = 0
+
+    def fetch(p):
+        for attempt in range(3):
+            try:
+                r = session.get(TM_PROJECT_URL.format(p["sourceId"]), timeout=60)
+                if r.ok:
+                    d = json.loads(r.text, strict=False)
+                    return (p, [c["name"].strip() for c in d.get("campaigns") or [] if c.get("name")],
+                            [i["name"] for i in d.get("interests") or [] if i.get("name")])
+            except (requests.RequestException, ValueError, KeyError, TypeError):
+                pass
+            time.sleep(1 + attempt)
+        return p, None, None
+
+    print(f"Fetching TM campaigns/interests for {len(projects)} projects...", flush=True)
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        for done, (p, campaigns, interests) in enumerate(pool.map(fetch, projects), 1):
+            if campaigns is None:
+                failures += 1
+            else:
+                p["campaigns"], p["interests"] = campaigns, interests
+            if done % 2000 == 0:
+                print(f"  {done}/{len(projects)}...", flush=True)
+    if failures:
+        print(f"  {failures} metadata lookups failed (retried next run)", file=sys.stderr)
     return failures
 
 
@@ -304,6 +349,14 @@ def main():
 
     previous = load_json(OUTPUT)
     prev_tm_count = sum(1 for p in (previous or {}).get("projects", []) if p.get("tool") == "tm")
+    # Campaigns/interests from the previous output (any schema version), so a
+    # full rebuild only re-fetches projects that changed since then.
+    prev_meta = {
+        str(p["sourceId"]): (p["campaigns"], p.get("interests") or [])
+        for p in (previous or {}).get("projects", [])
+        if p.get("tool") == "tm" and p.get("campaigns") is not None
+    }
+    prev_ts = parse_ts((previous or {}).get("generated", ""))
 
     thread_local = threading.local()
 
@@ -396,6 +449,24 @@ def main():
         [p for p in projects if p.get("pctMapped") == 0 and p.get("contributors") is None]
     )
 
+    # Campaigns/interests: reuse earlier values for projects unchanged on R2
+    # since the previous output, fetch the rest (new, changed, or failed).
+    modified_since = {}
+    for key, last_modified in s3_objects.items():
+        modified_since[extract_project_id(key)] = last_modified
+    cutoff = prev_ts - timedelta(hours=OVERLAP_BUFFER_HOURS) if prev_ts else None
+    need_meta = []
+    for p in projects:
+        if p.get("campaigns") is not None:
+            continue
+        sid = str(p["sourceId"])
+        lm = modified_since.get(sid)
+        if sid in prev_meta and cutoff and lm and lm < cutoff:
+            p["campaigns"], p["interests"] = prev_meta[sid]
+        else:
+            need_meta.append(p)
+    fetch_tm_meta(need_meta)
+
     # Re-classify OAM imagery for every TM project with the current cache, so
     # unchanged projects pick up newly catalogued OAM images too.
     reclassified = 0
@@ -417,6 +488,7 @@ def main():
     projects.extend(fair_projects)
 
     for p in projects:
+        classify_project(p)
         reason = exclusion_reason(p)
         p["excluded"] = reason is not None
         p["excludedReason"] = reason
@@ -427,6 +499,7 @@ def main():
         "schemaVersion": SCHEMA_VERSION,
         "generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "totalProjects": len(projects),
+        "driverLabels": DRIVERS,
         "projects": projects,
     }
     atomic_json_write(OUTPUT, output)
@@ -443,6 +516,15 @@ def main():
     print("\nExcluded from default views:")
     for (tool, reason), n in sorted(excluded.items()):
         print(f"  {tool} {reason}: {n}")
+
+    by_driver = {}
+    for p in projects:
+        for d in p["drivers"]:
+            by_driver[d] = by_driver.get(d, 0) + 1
+    print("\nDrivers (primary):")
+    for d, n in sorted(by_driver.items(), key=lambda x: -x[1]):
+        print(f"  {d}: {n}")
+    print(f"  (no primary driver: {sum(1 for p in projects if not p['drivers'])})")
 
     by_imagery = {}
     for p in projects:

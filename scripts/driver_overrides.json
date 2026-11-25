@@ -1,0 +1,3 @@
+{
+  "_comment": "Manual driver corrections, keyed by project uid (tm-123, ms-45, fair-6). Each value replaces the automatic classification: {\"drivers\": [...], \"mentioned\": [...], \"note\": \"why\"}. Driver keys are listed in drivers.py."
+}

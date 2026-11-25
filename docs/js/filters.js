@@ -15,6 +15,7 @@ window.DashboardFilters = (function () {
     'filter-country',
     'filter-org',
     'filter-status',
+    'filter-driver',
   ];
 
   function init(callback) {
@@ -27,6 +28,8 @@ window.DashboardFilters = (function () {
 
     var excl = document.getElementById('filter-include-excluded');
     if (excl) excl.addEventListener('change', handleFilterChange);
+    var ment = document.getElementById('filter-include-mentioned');
+    if (ment) ment.addEventListener('change', handleFilterChange);
 
     var resetBtn = document.getElementById('btn-reset-filters');
     if (resetBtn) resetBtn.addEventListener('click', resetFilters);
@@ -51,6 +54,7 @@ window.DashboardFilters = (function () {
     populateSelect('filter-country', Data.getUniqueValues('country'), 'All countries', null);
     populateSelect('filter-org', Data.getUniqueValues('org'), 'All organizations', null);
     populateSelect('filter-status', Data.getUniqueValues('status'), 'All statuses', null);
+    populateDriverSelect(Data.getAvailableValues('driver', {}), null);
 
     var exclLabel = document.getElementById('excluded-count');
     if (exclLabel) exclLabel.textContent = Data.getExcludedCount().toLocaleString();
@@ -95,6 +99,29 @@ window.DashboardFilters = (function () {
     // Status
     var statusVals = Data.getAvailableValues('status', filters);
     populateSelect('filter-status', Object.keys(statusVals).sort(), 'All statuses', filters.status);
+
+    populateDriverSelect(Data.getAvailableValues('driver', filters), filters.driver);
+  }
+
+  /** Driver dropdown: labelled keys in taxonomy order, then "No driver". */
+  function populateDriverSelect(available, currentValue) {
+    var select = document.getElementById('filter-driver');
+    if (!select) return;
+    var Data = window.DashboardData;
+    var labels = Data.getDriverLabels();
+    select.innerHTML = '';
+    var add = function (value, text) {
+      var opt = document.createElement('option');
+      opt.value = value;
+      opt.textContent = text;
+      select.appendChild(opt);
+    };
+    add('All', 'All drivers');
+    Object.keys(labels).forEach(function (k) {
+      if (available[k]) add(k, labels[k]);
+    });
+    if (available[Data.NO_DRIVER]) add(Data.NO_DRIVER, 'No driver identified');
+    select.value = currentValue && available[currentValue] ? currentValue : 'All';
   }
 
   function populateToolSelect(select, toolMap, currentValue) {
@@ -157,8 +184,15 @@ window.DashboardFilters = (function () {
       country: getSelectValue('filter-country'),
       org: getSelectValue('filter-org'),
       status: getSelectValue('filter-status'),
+      driver: getSelectValue('filter-driver'),
       includeExcluded: isIncludeExcluded(),
+      includeMentioned: isChecked('filter-include-mentioned'),
     };
+  }
+
+  function isChecked(id) {
+    var el = document.getElementById(id);
+    return !!(el && el.checked);
   }
 
   function isIncludeExcluded() {
@@ -201,6 +235,8 @@ window.DashboardFilters = (function () {
     });
     var excl = document.getElementById('filter-include-excluded');
     if (excl) excl.checked = false;
+    var ment = document.getElementById('filter-include-mentioned');
+    if (ment) ment.checked = false;
     // Repopulate with full dataset
     populateDropdowns();
     updating = false;

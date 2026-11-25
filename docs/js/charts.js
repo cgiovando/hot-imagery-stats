@@ -42,7 +42,32 @@ window.DashboardCharts = (function () {
     renderImageryBars(projects, 'imagery-area', 'chart-imagery-area', function (p) { return p.areaSqKm || 0; }, ' km²');
     renderAreaByYear(projects);
     renderTimeline(projects);
+    renderDrivers(projects);
     renderCountries(projects);
+  }
+
+  var includeMentioned = false;
+  function setIncludeMentioned(v) { includeMentioned = !!v; }
+
+  /* ---- Projects by driver (stacked by imagery) ---- */
+  function renderDrivers(projects) {
+    var labels = Data.getDriverLabels();
+    var expanded = [];
+    projects.forEach(function (p) {
+      Data.driversOf(p, includeMentioned).forEach(function (d) {
+        expanded.push({ driver: labels[d] || d, imagery: p.imagery });
+      });
+    });
+    var stack = stackedByImagery(expanded, function (e) { return e.driver; }, function () { return 1; });
+    var order = Object.keys(labels).map(function (k) { return labels[k]; })
+      .filter(function (l) { return stack.buckets[l]; });
+    var wrap = document.getElementById('chart-drivers-wrap');
+    if (wrap) wrap.style.height = Math.max(160, order.length * 26 + 80) + 'px';
+    draw('drivers', 'chart-drivers', {
+      type: 'bar',
+      data: { labels: order, datasets: datasetsFor(stack, order) },
+      options: stackedOptions(' projects', true),
+    });
   }
 
   /** Sum `valueFn` per imagery source. */
@@ -219,5 +244,6 @@ window.DashboardCharts = (function () {
   return {
     init: init,
     updateAll: updateAll,
+    setIncludeMentioned: setIncludeMentioned,
   };
 })();

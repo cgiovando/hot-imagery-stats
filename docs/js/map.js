@@ -271,6 +271,13 @@ window.DashboardMap = (function () {
     area_over_1m_km2: 'area over 1M km\u00b2',
   };
 
+  /** MapLibre serializes array properties to JSON strings. */
+  function parseList(v) {
+    if (Array.isArray(v)) return v;
+    if (typeof v !== 'string' || !v) return [];
+    try { var a = JSON.parse(v); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+  }
+
   /** Format a value that may legitimately be 0; null/undefined -> N/A. */
   function orNA(v, suffix) {
     if (v == null || v === '' || v === 'null') return 'N/A';
@@ -306,6 +313,16 @@ window.DashboardMap = (function () {
         html += '<br><strong>Mappers:</strong> ' + orNA(props.contributors);
       }
     }
+    var drivers = parseList(props.drivers);
+    var mentioned = parseList(props.driversMentioned);
+    var phase = parseList(props.phase);
+    if (drivers.length || mentioned.length) {
+      var labels = window.DashboardData.getDriverLabels();
+      var name = function (k) { return esc(labels[k] || k); };
+      html += '<br><strong>Driver:</strong> ' + (drivers.length ? drivers.map(name).join(', ') : 'none');
+      if (mentioned.length) html += ' <span class="popup-muted">(mentions: ' + mentioned.map(name).join(', ') + ')</span>';
+    }
+    if (phase.length) html += '<br><strong>Phase:</strong> ' + esc(phase.join(', '));
     if (props.excludedReason) {
       html += '<br><em class="popup-excluded">Excluded by default: ' +
         esc(EXCLUSION_LABELS[props.excludedReason] || props.excludedReason) + '</em>';
@@ -361,6 +378,9 @@ window.DashboardMap = (function () {
           contributors: p.contributors,
           results: p.results,
           excludedReason: p.excludedReason || '',
+          drivers: p.drivers || [],
+          driversMentioned: p.driversMentioned || [],
+          phase: p.phase || [],
         },
       });
     });

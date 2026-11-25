@@ -45,6 +45,19 @@ window.DashboardData = (function () {
       });
   }
 
+  var NO_DRIVER = '__none__';
+
+  function getDriverLabels() {
+    return (rawData && rawData.driverLabels) || {};
+  }
+
+  /** Driver keys that count for filtering, given the mentions toggle. */
+  function driversOf(p, includeMentioned) {
+    var list = (p.drivers || []).slice();
+    if (includeMentioned) list = list.concat(p.driversMentioned || []);
+    return list;
+  }
+
   function getGenerated() {
     return rawData ? rawData.generated : null;
   }
@@ -80,6 +93,14 @@ window.DashboardData = (function () {
     if (excludeKey !== 'status' && filters.status && filters.status !== 'All') {
       if (p.status !== filters.status) return false;
     }
+    if (excludeKey !== 'driver' && filters.driver && filters.driver !== 'All') {
+      var ds = driversOf(p, filters.includeMentioned);
+      if (filters.driver === NO_DRIVER) {
+        if (ds.length) return false;
+      } else if (ds.indexOf(filters.driver) === -1) {
+        return false;
+      }
+    }
     return true;
   }
 
@@ -106,6 +127,10 @@ window.DashboardData = (function () {
         }
       } else if (field === 'tool') {
         if (p.toolLabel) values[p.tool + '|' + p.toolLabel] = true;
+      } else if (field === 'driver') {
+        var ds = driversOf(p, filters.includeMentioned);
+        if (!ds.length) values[NO_DRIVER] = true;
+        ds.forEach(function (d) { values[d] = true; });
       } else {
         var val = p[field];
         if (Array.isArray(val)) {
@@ -153,7 +178,8 @@ window.DashboardData = (function () {
   var CSV_COLUMNS = [
     'uid', 'tool', 'sourceId', 'name', 'status', 'imagery', 'country', 'org',
     'created', 'areaSqKm', 'lon', 'lat', 'pctMapped', 'pctValidated',
-    'contributors', 'excluded', 'excludedReason', 'projectUrl',
+    'contributors', 'drivers', 'driversMentioned', 'phase', 'campaigns',
+    'excluded', 'excludedReason', 'projectUrl',
   ];
 
   /** Quote a CSV cell; neutralize spreadsheet formulas in text cells. */
@@ -172,7 +198,7 @@ window.DashboardData = (function () {
         var v;
         if (col === 'lon') v = p.centroid ? p.centroid[0] : null;
         else if (col === 'lat') v = p.centroid ? p.centroid[1] : null;
-        else if (col === 'country') v = (p.country || []).join('; ');
+        else if (Array.isArray(p[col])) v = p[col].join('; ');
         else v = p[col];
         return csvCell(v, !numeric[col]);
       });
@@ -185,6 +211,9 @@ window.DashboardData = (function () {
     IMAGERY_ORDER: IMAGERY_ORDER,
     IMAGERY_COLORS: IMAGERY_COLORS,
     getExcludedCount: getExcludedCount,
+    getDriverLabels: getDriverLabels,
+    driversOf: driversOf,
+    NO_DRIVER: NO_DRIVER,
     toCSV: toCSV,
     loadData: loadData,
     getGenerated: getGenerated,

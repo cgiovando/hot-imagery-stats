@@ -5,7 +5,7 @@
   'use strict';
 
   // Filter keys that map to URL params
-  var PARAM_KEYS = ['tool', 'year', 'imagery', 'country', 'org', 'status'];
+  var PARAM_KEYS = ['tool', 'year', 'imagery', 'country', 'org', 'status', 'driver'];
 
   // Map param names to select element IDs
   var PARAM_TO_SELECT = {
@@ -15,6 +15,7 @@
     country: 'filter-country',
     org: 'filter-org',
     status: 'filter-status',
+    driver: 'filter-driver',
   };
 
   /** Read filters from URL search params. */
@@ -26,6 +27,7 @@
       if (val) filters[key] = val;
     });
     if (params.get('all') === '1') filters.includeExcluded = true;
+    if (params.get('mentions') === '1') filters.includeMentioned = true;
     return filters;
   }
 
@@ -38,6 +40,7 @@
       }
     });
     if (filters.includeExcluded) params.set('all', '1');
+    if (filters.includeMentioned) params.set('mentions', '1');
     var qs = params.toString();
     var newURL = window.location.pathname + (qs ? '?' + qs : '');
     history.replaceState(null, '', newURL);
@@ -45,6 +48,10 @@
 
   /** Apply URL params to filter dropdowns. */
   function applyURLFilters(urlFilters) {
+    if (urlFilters.includeMentioned) {
+      var ment = document.getElementById('filter-include-mentioned');
+      if (ment) ment.checked = true;
+    }
     if (urlFilters.includeExcluded) {
       var excl = document.getElementById('filter-include-excluded');
       if (excl) excl.checked = true;
@@ -133,6 +140,8 @@
   }
 
   function updateDashboard(projects) {
+    var f = window.DashboardFilters.getCurrentFilters();
+    window.DashboardCharts.setIncludeMentioned(f.includeMentioned);
     updateSummaryCards(projects);
     window.DashboardCharts.updateAll(projects);
     window.DashboardMap.updateMarkers(projects);

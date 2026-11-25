@@ -91,10 +91,20 @@
           <option value="All">All statuses</option>
         </select>
 
+        <select id="filter-driver" class="filter-select" aria-label="Driver (hazard or crisis)">
+          <option value="All">All drivers</option>
+        </select>
+
         <label class="inline-flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none"
                title="Projects that never had any mapping activity, or with an area over 1M km&sup2;. See methodology notes below.">
           <input id="filter-include-excluded" type="checkbox" class="accent-hot-red">
           Include <span id="excluded-count">--</span>&nbsp;excluded projects
+        </label>
+
+        <label class="inline-flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none"
+               title="Also match drivers that appear only in a project's short description or interest tags, often as background risk rather than the reason for the project.">
+          <input id="filter-include-mentioned" type="checkbox" class="accent-hot-red">
+          Match drivers mentioned in descriptions
         </label>
 
         <button id="btn-reset-filters" type="button"
@@ -181,6 +191,13 @@
         </div>
       </div>
       <div class="chart-card lg:col-span-2">
+        <h2 class="text-sm font-semibold text-gray-700 mb-1">Projects by Driver</h2>
+        <p class="text-xs text-gray-500 mb-3">The hazard or crisis a project responds to, from its campaign and project name. A project can have more than one driver.</p>
+        <div id="chart-drivers-wrap" class="chart-box" style="height: 420px">
+          <canvas id="chart-drivers"></canvas>
+        </div>
+      </div>
+      <div class="chart-card lg:col-span-2">
         <h2 class="text-sm font-semibold text-gray-700 mb-3">Top 20 Countries (projects)</h2>
         <div id="chart-countries-wrap" class="chart-box" style="height: 550px">
           <canvas id="chart-countries"></canvas>
@@ -193,6 +210,7 @@
       <p class="font-semibold text-gray-600">Methodology</p>
       <p>Area is the cumulative area of each project's area of interest, so overlapping projects count more than once.</p>
       <p>Excluded by default (tick "Include excluded projects" to show them): projects with no mapping activity at all (Tasking Manager: 0% mapped, no mappers and no time logged; MapSwipe: 0% progress and no contributors), and projects over 1M km&sup2;, which are world- or country-scale outlines rather than mapped areas. Tasking Manager can report 0% mapped for projects that were worked on, so mapper activity, not percentage, decides exclusion. One global MapSwipe validation project (87M km&sup2;) is always left out.</p>
+      <p>Drivers (the hazard or crisis behind a project: flood, tropical cyclone, earthquake, wildfire, epidemic, conflict, displacement and others) are assigned by multilingual keyword rules over campaign names and project names. Drivers that appear only in a project's short description or in its Tasking Manager interest tags are kept separately as "mentioned", since they often describe background risk; tick "Match drivers mentioned in descriptions" to include them. Projects in a series (one event often spans many projects) each count once.</p>
       <p>Older Tasking Manager projects (pre-2020) often show "Not specified" because the imagery field was not consistently recorded.</p>
       <p>MapSwipe countries are derived from project centroids. MapSwipe imagery comes from its public API and a legacy export; some projects migrated to MapSwipe's new backend have no recorded source. MapSwipe areas represent geographic coverage; actual tile requests are higher due to multi-user verification.</p>
       <p>fAIr datasets represent AI training areas, mostly OpenAerialMap imagery classified by platform (Drone, Satellite, Aircraft) via the <a href="https://github.com/cgiovando/oam-api" class="text-hot-red hover:underline">OAM catalog</a>. fAIr does not currently use Bing/Microsoft imagery.</p>

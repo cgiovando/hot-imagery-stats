@@ -14,6 +14,7 @@ Humanitarian mapping efforts rely on satellite imagery from multiple providers i
 - **Area by imagery source per year**, and project counts over time (yearly or monthly)
 - **Geographic distribution** of mapping projects worldwide (circles for TM, diamonds for MapSwipe, triangles for fAIr)
 - **Country-level breakdown** of mapping activity, by imagery source
+- **Drivers**: the hazard or crisis behind each project (flood, tropical cyclone, earthquake, wildfire, epidemic, conflict, displacement and more), as a filter and a chart
 - **CSV download** of the currently filtered projects
 - **Cascading filters** - selecting one filter narrows options in all others (tool, year, imagery, country, organization, status)
 - **Shareable URLs** - filter state and map position are synced to the URL for easy sharing
@@ -32,6 +33,10 @@ Project data is sourced from the [MapSwipe](https://mapswipe.org) public data ex
 ### fAIr (live)
 
 [fAIr](https://fair.hotosm.org) is HOT's AI-assisted mapping tool. Datasets come from the public fAIr API, with area computed from their training AOIs. OpenAerialMap imagery is classified by platform (drone, satellite, aircraft) using the [oam-api](https://github.com/cgiovando/oam-api) catalog.
+
+### Drivers (hazard / crisis classification)
+
+Each project gets zero or more drivers from multilingual keyword rules in [`scripts/drivers.py`](scripts/drivers.py), applied on every daily run. Campaign and project names give the `drivers` field (high precision). Drivers found only in a Tasking Manager project's short description or interest tags go to `driversMentioned`, since they often describe background risk rather than the reason for the project. Tasking Manager interest tags also give a `phase` (preparedness, response, recovery). Campaigns and interests are not in the insta-tm mirror, so the pipeline reads them from the Tasking Manager API for new and changed projects and reuses earlier values for the rest. Manual corrections go in [`scripts/driver_overrides.json`](scripts/driver_overrides.json).
 
 ### Excluded projects
 
@@ -106,6 +111,8 @@ docs/                        # GitHub Pages root
                              #   fair_summary, oam_platform_cache
 scripts/
 ├── common.py                # Shared helpers (atomic writes, drop guard, coordinates)
+├── drivers.py               # Driver (hazard / crisis) keyword classification
+├── driver_overrides.json    # Manual driver corrections by project uid
 ├── fetch_mapswipe.py        # Fetch MapSwipe data from API + legacy CSV
 ├── fetch_fair.py            # Fetch fAIr datasets, AOIs and OAM platform cache
 ├── generate_summary.py      # Generate unified summary from R2 + MapSwipe + fAIr
