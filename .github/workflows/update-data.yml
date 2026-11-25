@@ -14,8 +14,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -25,19 +23,18 @@ env:
   SITE_URL: https://cgiovando.github.io/hot-imagery-stats
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+    outputs:
+      freshness: ${{ steps.freshness.outcome }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"
@@ -68,16 +65,39 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: python scripts/generate_summary.py
 
+      # Evaluated here (the data lives in this job), reported after deploy.
+      - name: Check data freshness
+        id: freshness
+        continue-on-error: true
+        run: python scripts/check_freshness.py
+
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: docs
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deploy
         uses: actions/deploy-pages@v4
 
-      # Runs after the deploy so working sources still publish; fails the run
-      # (and sends GitHub's failure email) when a source has been down >48h.
-      - name: Check data freshness
-        run: python scripts/check_freshness.py
+  # Fails the run (and sends GitHub's failure email) when a source has been
+  # down >48h, without holding back the data from sources that still work.
+  freshness:
+    needs: [build, deploy]
+    if: needs.build.outputs.freshness == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report stale data
+        run: |
+          echo "::error::A data source has not updated for more than 48 hours. See the 'Check data freshness' step of the build job."
+          exit 1
