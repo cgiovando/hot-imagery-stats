@@ -71,8 +71,12 @@
           <option value="All">All tools</option>
         </select>
 
-        <select id="filter-year" class="filter-select" aria-label="Year">
-          <option value="All">All years</option>
+        <select id="filter-year-from" class="filter-select" aria-label="From year">
+          <option value="All">From: any year</option>
+        </select>
+
+        <select id="filter-year-to" class="filter-select" aria-label="To year">
+          <option value="All">To: any year</option>
         </select>
 
         <select id="filter-imagery" class="filter-select" aria-label="Imagery source">
@@ -112,10 +116,18 @@
           Reset
         </button>
 
-        <button id="btn-download-csv" type="button"
-                class="ml-auto text-xs font-medium px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-          Download CSV
-        </button>
+        <span class="ml-auto inline-flex items-center gap-2">
+          <span class="text-xs text-gray-500 hidden sm:inline" title="Downloads contain the projects matching the current filters">Download filtered:</span>
+          <button id="btn-download-csv" type="button"
+                  class="text-xs font-medium px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+            CSV
+          </button>
+          <button id="btn-download-geojson" type="button"
+                  title="Points at project centroids"
+                  class="text-xs font-medium px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+            GeoJSON
+          </button>
+        </span>
       </div>
     </div>
   </section>

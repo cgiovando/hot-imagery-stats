@@ -76,10 +76,15 @@ window.DashboardData = (function () {
     if (excludeKey !== 'tool' && filters.tool) {
       if (p.tool !== filters.tool) return false;
     }
-    if (excludeKey !== 'year' && filters.year) {
+    if (excludeKey !== 'year' && (filters.yearFrom || filters.yearTo)) {
       if (!p.created) return false;
       var year = parseInt(p.created.substring(0, 4), 10);
-      if (year !== filters.year) return false;
+      // Accept the bounds in either order.
+      var lo = Math.min(filters.yearFrom || -Infinity, filters.yearTo || Infinity);
+      var hi = Math.max(filters.yearFrom || -Infinity, filters.yearTo || Infinity);
+      if (filters.yearFrom && !filters.yearTo) { lo = filters.yearFrom; hi = Infinity; }
+      if (filters.yearTo && !filters.yearFrom) { lo = -Infinity; hi = filters.yearTo; }
+      if (year < lo || year > hi) return false;
     }
     if (excludeKey !== 'imagery' && filters.imagery && filters.imagery !== 'All') {
       if (p.imagery !== filters.imagery) return false;
@@ -190,6 +195,22 @@ window.DashboardData = (function () {
     return '"' + s.replace(/"/g, '""') + '"';
   }
 
+  /** GeoJSON FeatureCollection of project centroids (null geometry if none). */
+  function toGeoJSON(projects) {
+    var features = projects.map(function (p) {
+      var props = {};
+      CSV_COLUMNS.forEach(function (col) {
+        if (col !== 'lon' && col !== 'lat') props[col] = p[col] === undefined ? null : p[col];
+      });
+      return {
+        type: 'Feature',
+        geometry: p.centroid ? { type: 'Point', coordinates: p.centroid } : null,
+        properties: props,
+      };
+    });
+    return JSON.stringify({ type: 'FeatureCollection', features: features });
+  }
+
   function toCSV(projects) {
     var numeric = { sourceId: 1, areaSqKm: 1, lon: 1, lat: 1, pctMapped: 1, pctValidated: 1, contributors: 1 };
     var lines = [CSV_COLUMNS.join(',')];
@@ -215,6 +236,7 @@ window.DashboardData = (function () {
     driversOf: driversOf,
     NO_DRIVER: NO_DRIVER,
     toCSV: toCSV,
+    toGeoJSON: toGeoJSON,
     loadData: loadData,
     getGenerated: getGenerated,
     getAllProjects: getAllProjects,

@@ -10,7 +10,8 @@ window.DashboardFilters = (function () {
 
   var FILTER_IDS = [
     'filter-tool',
-    'filter-year',
+    'filter-year-from',
+    'filter-year-to',
     'filter-imagery',
     'filter-country',
     'filter-org',
@@ -49,7 +50,8 @@ window.DashboardFilters = (function () {
       populateToolSelect(toolSelect, toolMap, null);
     }
 
-    populateSelect('filter-year', Data.getUniqueYears(), 'All years', null);
+    populateSelect('filter-year-from', Data.getUniqueYears(), 'From: any year', null, 'From ');
+    populateSelect('filter-year-to', Data.getUniqueYears(), 'To: any year', null, 'To ');
     populateSelect('filter-imagery', Data.getUniqueValues('imagery'), 'All sources', null);
     populateSelect('filter-country', Data.getUniqueValues('country'), 'All countries', null);
     populateSelect('filter-org', Data.getUniqueValues('org'), 'All organizations', null);
@@ -82,7 +84,8 @@ window.DashboardFilters = (function () {
     // Year
     var yearVals = Data.getAvailableValues('year', filters);
     var years = Object.keys(yearVals).map(Number).sort(function (a, b) { return a - b; });
-    populateSelect('filter-year', years, 'All years', filters.year);
+    populateSelect('filter-year-from', years, 'From: any year', filters.yearFrom, 'From ');
+    populateSelect('filter-year-to', years, 'To: any year', filters.yearTo, 'To ');
 
     // Imagery
     var imgVals = Data.getAvailableValues('imagery', filters);
@@ -146,7 +149,7 @@ window.DashboardFilters = (function () {
     }
   }
 
-  function populateSelect(elementId, values, defaultLabel, currentValue) {
+  function populateSelect(elementId, values, defaultLabel, currentValue, prefix) {
     var select = document.getElementById(elementId);
     if (!select) return;
 
@@ -160,7 +163,7 @@ window.DashboardFilters = (function () {
     values.forEach(function (val) {
       var opt = document.createElement('option');
       opt.value = val;
-      opt.textContent = val;
+      opt.textContent = (prefix || '') + val;
       select.appendChild(opt);
     });
 
@@ -179,7 +182,8 @@ window.DashboardFilters = (function () {
   function getCurrentFilters() {
     return {
       tool: getSelectValue('filter-tool'),
-      year: getSelectValue('filter-year', true),
+      yearFrom: getSelectValue('filter-year-from', true),
+      yearTo: getSelectValue('filter-year-to', true),
       imagery: getSelectValue('filter-imagery'),
       country: getSelectValue('filter-country'),
       org: getSelectValue('filter-org'),

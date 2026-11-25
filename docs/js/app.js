@@ -5,12 +5,13 @@
   'use strict';
 
   // Filter keys that map to URL params
-  var PARAM_KEYS = ['tool', 'year', 'imagery', 'country', 'org', 'status', 'driver'];
+  var PARAM_KEYS = ['tool', 'yearFrom', 'yearTo', 'imagery', 'country', 'org', 'status', 'driver'];
 
   // Map param names to select element IDs
   var PARAM_TO_SELECT = {
     tool: 'filter-tool',
-    year: 'filter-year',
+    yearFrom: 'filter-year-from',
+    yearTo: 'filter-year-to',
     imagery: 'filter-imagery',
     country: 'filter-country',
     org: 'filter-org',
@@ -26,6 +27,12 @@
       var val = params.get(key);
       if (val) filters[key] = val;
     });
+    // Older links used a single ?year=YYYY
+    var legacyYear = params.get('year');
+    if (legacyYear && !filters.yearFrom && !filters.yearTo) {
+      filters.yearFrom = legacyYear;
+      filters.yearTo = legacyYear;
+    }
     if (params.get('all') === '1') filters.includeExcluded = true;
     if (params.get('mentions') === '1') filters.includeMentioned = true;
     return filters;
@@ -103,6 +110,8 @@
 
         var csvBtn = document.getElementById('btn-download-csv');
         if (csvBtn) csvBtn.addEventListener('click', downloadCSV);
+        var gjBtn = document.getElementById('btn-download-geojson');
+        if (gjBtn) gjBtn.addEventListener('click', downloadGeoJSON);
 
         window.DashboardCharts.init();
 
@@ -195,17 +204,26 @@
     if (el) el.textContent = text;
   }
 
-  function downloadCSV() {
-    var csv = window.DashboardData.toCSV(window.DashboardData.getFilteredProjects());
-    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+  function saveFile(content, type, ext) {
+    var blob = new Blob([content], { type: type });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'hot-imagery-projects-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.download = 'hot-imagery-projects-' + new Date().toISOString().slice(0, 10) + '.' + ext;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  function downloadCSV() {
+    var csv = window.DashboardData.toCSV(window.DashboardData.getFilteredProjects());
+    saveFile('\ufeff' + csv, 'text/csv;charset=utf-8', 'csv');
+  }
+
+  function downloadGeoJSON() {
+    var gj = window.DashboardData.toGeoJSON(window.DashboardData.getFilteredProjects());
+    saveFile(gj, 'application/geo+json', 'geojson');
   }
 
   // Start

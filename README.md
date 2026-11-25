@@ -15,7 +15,7 @@ Humanitarian mapping efforts rely on satellite imagery from multiple providers i
 - **Geographic distribution** of mapping projects worldwide (circles for TM, diamonds for MapSwipe, triangles for fAIr)
 - **Country-level breakdown** of mapping activity, by imagery source
 - **Drivers**: the hazard or crisis behind each project (flood, tropical cyclone, earthquake, wildfire, epidemic, conflict, displacement and more), as a filter and a chart
-- **CSV download** of the currently filtered projects
+- **CSV and GeoJSON downloads** of the currently filtered projects (GeoJSON as points at project centroids), and a from/to year range
 - **Cascading filters** - selecting one filter narrows options in all others (tool, year, imagery, country, organization, status)
 - **Shareable URLs** - filter state and map position are synced to the URL for easy sharing
 - **Auto-zoom** - map fits to the extent of filtered data
