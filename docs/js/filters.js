@@ -50,9 +50,9 @@ window.DashboardFilters = (function () {
       populateToolSelect(toolSelect, toolMap, null);
     }
 
-    populateSelect('filter-year-from', Data.getUniqueYears(), 'From: any year', null, 'From ');
-    populateSelect('filter-year-to', Data.getUniqueYears(), 'To: any year', null, 'To ');
-    populateSelect('filter-imagery', Data.getUniqueValues('imagery'), 'All sources', null);
+    populateSelect('filter-year-from', Data.getUniqueYears(), 'From: any', null, 'From ');
+    populateSelect('filter-year-to', Data.getUniqueYears(), 'To: any', null, 'To ');
+    populateSelect('filter-imagery', Data.getUniqueValues('imagery'), 'All imagery', null);
     populateSelect('filter-country', Data.getUniqueValues('country'), 'All countries', null);
     populateSelect('filter-org', Data.getUniqueValues('org'), 'All organizations', null);
     populateSelect('filter-status', Data.getUniqueValues('status'), 'All statuses', null);
@@ -84,12 +84,12 @@ window.DashboardFilters = (function () {
     // Year
     var yearVals = Data.getAvailableValues('year', filters);
     var years = Object.keys(yearVals).map(Number).sort(function (a, b) { return a - b; });
-    populateSelect('filter-year-from', years, 'From: any year', filters.yearFrom, 'From ');
-    populateSelect('filter-year-to', years, 'To: any year', filters.yearTo, 'To ');
+    populateSelect('filter-year-from', years, 'From: any', filters.yearFrom, 'From ');
+    populateSelect('filter-year-to', years, 'To: any', filters.yearTo, 'To ');
 
     // Imagery
     var imgVals = Data.getAvailableValues('imagery', filters);
-    populateSelect('filter-imagery', Object.keys(imgVals).sort(), 'All sources', filters.imagery);
+    populateSelect('filter-imagery', Object.keys(imgVals).sort(), 'All imagery', filters.imagery);
 
     // Country
     var countryVals = Data.getAvailableValues('country', filters);
@@ -194,6 +194,27 @@ window.DashboardFilters = (function () {
     };
   }
 
+  /** Highlight filters that are set, update the More badge and Reset. */
+  function markActive() {
+    var f = getCurrentFilters();
+    FILTER_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.toggle('is-active', el.value !== 'All');
+    });
+    var more = (f.status ? 1 : 0) + (f.includeExcluded ? 1 : 0) + (f.includeMentioned ? 1 : 0);
+    var badge = document.getElementById('more-badge');
+    if (badge) {
+      badge.textContent = more;
+      badge.hidden = more === 0;
+    }
+    var any = more > 0 || FILTER_IDS.some(function (id) {
+      var el = document.getElementById(id);
+      return el && el.value !== 'All';
+    });
+    var reset = document.getElementById('btn-reset-filters');
+    if (reset) reset.setAttribute('aria-disabled', any ? 'false' : 'true');
+  }
+
   function isChecked(id) {
     var el = document.getElementById(id);
     return !!(el && el.checked);
@@ -251,6 +272,7 @@ window.DashboardFilters = (function () {
     init: init,
     populateDropdowns: populateDropdowns,
     getCurrentFilters: getCurrentFilters,
+    markActive: markActive,
     resetFilters: resetFilters,
   };
 })();

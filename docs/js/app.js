@@ -108,6 +108,7 @@
           applyURLFilters(urlFilters);
         }
 
+        initMenus();
         var csvBtn = document.getElementById('btn-download-csv');
         if (csvBtn) csvBtn.addEventListener('click', downloadCSV);
         var gjBtn = document.getElementById('btn-download-geojson');
@@ -150,6 +151,7 @@
 
   function updateDashboard(projects) {
     var f = window.DashboardFilters.getCurrentFilters();
+    window.DashboardFilters.markActive();
     window.DashboardCharts.setIncludeMentioned(f.includeMentioned);
     updateSummaryCards(projects);
     window.DashboardCharts.updateAll(projects);
@@ -214,6 +216,27 @@
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  /** <details> menus: close on outside click, Escape, or after an action. */
+  function initMenus() {
+    var menus = Array.prototype.slice.call(document.querySelectorAll('details.menu'));
+    var closeAll = function (except) {
+      menus.forEach(function (m) { if (m !== except) m.open = false; });
+    };
+    menus.forEach(function (m) {
+      m.addEventListener('toggle', function () { if (m.open) closeAll(m); });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('details.menu')) closeAll();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAll();
+    });
+    var dl = document.getElementById('menu-download');
+    if (dl) dl.addEventListener('click', function (e) {
+      if (e.target.closest('.menu-item')) dl.open = false;
+    });
   }
 
   function downloadCSV() {

@@ -51,6 +51,17 @@
       </div>
       <div class="flex items-center gap-4">
         <span id="data-timestamp" class="text-xs text-gray-400 hidden sm:inline"></span>
+        <details class="menu" id="menu-download">
+          <summary class="tool-btn tool-btn-primary">
+            <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m0 0 3.5-3.5M10 12 6.5 8.5M4 15.5h12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Download
+          </summary>
+          <div class="menu-panel menu-panel-right">
+            <div class="menu-note">Projects matching the current filters</div>
+            <button id="btn-download-csv" type="button" class="menu-item">CSV <small>spreadsheet</small></button>
+            <button id="btn-download-geojson" type="button" class="menu-item">GeoJSON <small>points at project centroids</small></button>
+          </div>
+        </details>
         <a href="https://github.com/cgiovando/hot-imagery-stats" target="_blank" rel="noopener"
            class="text-gray-400 hover:text-gray-600" aria-label="View on GitHub">
           <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
@@ -63,71 +74,68 @@
 
   <!-- Filters -->
   <section id="filters" class="bg-white border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-      <div class="flex flex-wrap items-center gap-3">
-        <span class="text-sm font-medium text-gray-700 mr-1">Filters:</span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <select id="filter-tool" class="filter-select w-tool" aria-label="Tool">
+            <option value="All">All tools</option>
+          </select>
 
-        <select id="filter-tool" class="filter-select" aria-label="Tool">
-          <option value="All">All tools</option>
-        </select>
+          <div class="year-range" role="group" aria-label="Year range">
+            <select id="filter-year-from" class="filter-select w-year" aria-label="From year">
+              <option value="All">From: any</option>
+            </select>
+            <span class="year-sep" aria-hidden="true">&ndash;</span>
+            <select id="filter-year-to" class="filter-select w-year" aria-label="To year">
+              <option value="All">To: any</option>
+            </select>
+          </div>
 
-        <select id="filter-year-from" class="filter-select" aria-label="From year">
-          <option value="All">From: any year</option>
-        </select>
+          <select id="filter-imagery" class="filter-select w-imagery" aria-label="Imagery source">
+            <option value="All">All imagery</option>
+          </select>
 
-        <select id="filter-year-to" class="filter-select" aria-label="To year">
-          <option value="All">To: any year</option>
-        </select>
+          <select id="filter-driver" class="filter-select w-driver" aria-label="Driver (hazard or crisis)">
+            <option value="All">All drivers</option>
+          </select>
 
-        <select id="filter-imagery" class="filter-select" aria-label="Imagery source">
-          <option value="All">All sources</option>
-        </select>
+          <select id="filter-country" class="filter-select w-country" aria-label="Country">
+            <option value="All">All countries</option>
+          </select>
 
-        <select id="filter-country" class="filter-select" aria-label="Country">
-          <option value="All">All countries</option>
-        </select>
+          <select id="filter-org" class="filter-select w-org" aria-label="Organization">
+            <option value="All">All organizations</option>
+          </select>
+        </div>
 
-        <select id="filter-org" class="filter-select" aria-label="Organization">
-          <option value="All">All organizations</option>
-        </select>
+        <div class="filter-actions">
+          <details class="menu" id="menu-more">
+            <summary class="tool-btn" aria-label="More filters">
+              More<span id="more-badge" class="badge" hidden></span>
+              <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 7.5 10 12l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+            </summary>
+            <div class="menu-panel menu-panel-wide">
+              <label class="menu-label" for="filter-status">Project status</label>
+              <select id="filter-status" class="filter-select w-full" aria-label="Project status">
+                <option value="All">All statuses</option>
+              </select>
+              <div class="menu-divider"></div>
+              <label class="menu-check" title="Projects that never had any mapping activity, or with an area over 1M km&sup2;. See the methodology notes.">
+                <input id="filter-include-excluded" type="checkbox" class="accent-hot-red">
+                <span>Include <span id="excluded-count">--</span> excluded projects
+                  <small>No mapping activity, or over 1M km&sup2;</small></span>
+              </label>
+              <label class="menu-check" title="Also match drivers that appear only in a project's short description or interest tags.">
+                <input id="filter-include-mentioned" type="checkbox" class="accent-hot-red">
+                <span>Match drivers mentioned in descriptions
+                  <small>Broader, less precise</small></span>
+              </label>
+            </div>
+          </details>
 
-        <select id="filter-status" class="filter-select" aria-label="Project status">
-          <option value="All">All statuses</option>
-        </select>
+          <button id="btn-reset-filters" type="button" class="tool-btn tool-btn-quiet">Reset</button>
 
-        <select id="filter-driver" class="filter-select" aria-label="Driver (hazard or crisis)">
-          <option value="All">All drivers</option>
-        </select>
-
-        <label class="inline-flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none"
-               title="Projects that never had any mapping activity, or with an area over 1M km&sup2;. See methodology notes below.">
-          <input id="filter-include-excluded" type="checkbox" class="accent-hot-red">
-          Include <span id="excluded-count">--</span>&nbsp;excluded projects
-        </label>
-
-        <label class="inline-flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none"
-               title="Also match drivers that appear only in a project's short description or interest tags, often as background risk rather than the reason for the project.">
-          <input id="filter-include-mentioned" type="checkbox" class="accent-hot-red">
-          Match drivers mentioned in descriptions
-        </label>
-
-        <button id="btn-reset-filters" type="button"
-                class="text-xs text-hot-red hover:text-hot-red-dark font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors">
-          Reset
-        </button>
-
-        <span class="ml-auto inline-flex items-center gap-2">
-          <span class="text-xs text-gray-500 hidden sm:inline" title="Downloads contain the projects matching the current filters">Download filtered:</span>
-          <button id="btn-download-csv" type="button"
-                  class="text-xs font-medium px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-            CSV
-          </button>
-          <button id="btn-download-geojson" type="button"
-                  title="Points at project centroids"
-                  class="text-xs font-medium px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-            GeoJSON
-          </button>
-        </span>
+        </div>
       </div>
     </div>
   </section>
